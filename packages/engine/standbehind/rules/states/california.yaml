@@ -1,0 +1,81 @@
+# California. The state that matters most to an LA-based advisor, and the one
+# with the two traps everyone forgets.
+code: CA
+name: California
+citation: "Cal. Rev. & Tax. Code; FTB 2025 tax rate schedules"
+
+# Trap 1: California has no preferential capital gains rate. Gain is ordinary
+# income, taxed up to 13.3%. A hold/sell comparison that applies a 20% federal
+# LTCG rate and forgets the state is off by a lot in this state.
+taxes_capital_gains_as_ordinary: true
+
+# Trap 2: California conforms to section 1031, but does not let go. Exchange a
+# California property into an out-of-state replacement and the deferred
+# California-source gain follows you: FTB Form 3840 must be filed every year
+# for as long as the gain stays deferred, and California taxes it when it is
+# finally recognised - regardless of where you live or where the property is
+# by then.
+conforms_to_section_1031: true
+clawback_on_out_of_state_exchange: true
+clawback_form: "FTB 3840"
+
+# California has never conformed to federal bonus depreciation, so a cost
+# segregation study that wipes out federal taxable income leaves the state
+# return largely untouched. Modelling them as one number is wrong.
+conforms_to_bonus_depreciation: false
+
+additional_surtax:
+  # Mental Health Services Tax, Prop 63. 1% over $1,000,000 - and the
+  # threshold is NOT doubled for joint filers, which is the detail that
+  # surprises people. 12.3% + 1% is where the famous 13.3% comes from.
+  rate: "0.01"
+  threshold: 1000000
+
+brackets:
+  single:
+    brackets:
+      - {up_to: 11079,  rate: "0.01"}
+      - {up_to: 26264,  rate: "0.02"}
+      - {up_to: 41452,  rate: "0.04"}
+      - {up_to: 57542,  rate: "0.06"}
+      - {up_to: 72724,  rate: "0.08"}
+      - {up_to: 371479, rate: "0.093"}
+      - {up_to: 445771, rate: "0.103"}
+      - {up_to: 742953, rate: "0.113"}
+      - {up_to: null,   rate: "0.123"}
+  married_filing_jointly:
+    brackets:
+      - {up_to: 22158,   rate: "0.01"}
+      - {up_to: 52528,   rate: "0.02"}
+      - {up_to: 82904,   rate: "0.04"}
+      - {up_to: 115084,  rate: "0.06"}
+      - {up_to: 145448,  rate: "0.08"}
+      - {up_to: 742958,  rate: "0.093"}
+      - {up_to: 891542,  rate: "0.103"}
+      - {up_to: 1485906, rate: "0.113"}
+      - {up_to: null,    rate: "0.123"}
+  married_filing_separately:
+    brackets:
+      - {up_to: 11079,  rate: "0.01"}
+      - {up_to: 26264,  rate: "0.02"}
+      - {up_to: 41452,  rate: "0.04"}
+      - {up_to: 57542,  rate: "0.06"}
+      - {up_to: 72724,  rate: "0.08"}
+      - {up_to: 371479, rate: "0.093"}
+      - {up_to: 445771, rate: "0.103"}
+      - {up_to: 742953, rate: "0.113"}
+      - {up_to: null,   rate: "0.123"}
+  head_of_household:
+    brackets:
+      - {up_to: 22159,  rate: "0.01"}
+      - {up_to: 52530,  rate: "0.02"}
+      - {up_to: 67751,  rate: "0.04"}
+      - {up_to: 83823,  rate: "0.06"}
+      - {up_to: 99005,  rate: "0.08"}
+      - {up_to: 505199, rate: "0.093"}
+      - {up_to: 606538, rate: "0.103"}
+      - {up_to: 1010875,rate: "0.113"}
+      - {up_to: null,   rate: "0.123"}
+notes: >
+  Single and MFJ schedules cross-validate: every MFJ threshold is exactly twice
+  the corresponding single threshold, which is how the FTB constructs them.

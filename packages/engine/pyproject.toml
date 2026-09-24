@@ -1,0 +1,40 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "standbehind-engine"
+version = "0.1.0"
+description = "Deterministic real-estate tax engine with provenance-gated recommendations"
+requires-python = ">=3.10"
+dependencies = ["pydantic>=2.9", "pyyaml>=6", "numpy>=1.26"]
+
+[project.optional-dependencies]
+dev = ["pytest>=8", "hypothesis>=6.100", "mypy>=1.11", "ruff>=0.6"]
+
+[tool.setuptools.packages.find]
+include = ["standbehind*"]
+
+[tool.setuptools.package-data]
+standbehind = ["rules/**/*.yaml"]
+
+[tool.pytest.ini_options]
+testpaths = ["../../tests"]
+filterwarnings = ["error"]
+
+[tool.ruff]
+line-length = 90
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM"]
+# DTZ001: the demo and its fixtures use fixed naive timestamps on purpose -
+# reproducibility is the point, and "now" would make the ledger hash unstable.
+ignore = ["E501", "DTZ001"]
+
+[tool.mypy]
+python_version = "3.10"
+strict = true
+warn_unreachable = true
+# The rule YAML is validated by pydantic at load time, not by mypy.
+disallow_any_generics = false

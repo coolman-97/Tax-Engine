@@ -1,0 +1,55 @@
+name: ci
+
+on:
+  push: {branches: [main]}
+  pull_request:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python: ["3.10", "3.12"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Install
+        run: |
+          python -m pip install --upgrade pip
+          pip install pydantic numpy pyyaml pytest hypothesis ruff
+
+      - name: Lint
+        run: ruff check packages/engine/standbehind scripts tests
+
+      - name: Tests (unit + property-based)
+        run: PYTHONPATH=packages/engine python -m pytest tests/ -q
+
+      # Regenerates docs/VALIDATION.md by running the engine against the IRS
+      # published tables, then fails if the document changed - so a refactor
+      # that moves a published number cannot land silently.
+      - name: Published tables reproduced
+        run: |
+          python scripts/validate.py
+          git diff --exit-code -- docs/VALIDATION.md
+
+      # A scenario replayed must hash identically. This is what makes "is this
+      # the number I showed the client in March" answerable.
+      - name: Ledger determinism
+        run: |
+          PYTHONPATH=packages/engine python - <<'PY'
+          from standbehind.fixtures import MARKET, build_household, build_strategies
+          from standbehind.simulate import simulate
+          p, s = build_household(), build_strategies()[0]
+          hashes = {simulate(p, s, MARKET, start_year=2026, horizon=30).ledger_hash
+                    for _ in range(3)}
+          assert len(hashes) == 1, f"ledger hash is not stable: {hashes}"
+          print("ledger hash stable:", hashes.pop())
+          PY
+
+      - name: Viewer bundle is in sync
+        run: |
+          PYTHONPATH=packages/engine python scripts/export_bundle.py
+          PYTHONPATH=packages/engine python scripts/build_web.py
+          git diff --exit-code -- packages/web/

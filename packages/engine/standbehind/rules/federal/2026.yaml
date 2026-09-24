@@ -1,0 +1,141 @@
+# Federal tax rules, tax year 2026.
+#
+# Sources (each figure below is traceable to one of these):
+#   [IRS]  IRS Newsroom, "IRS releases tax inflation adjustments for tax year
+#          2026, including amendments from the One, Big, Beautiful Bill"
+#          (Rev. Proc. 2025-32).
+#   [TF]   Tax Foundation, "2026 Tax Brackets" - used as an independent
+#          cross-check; every bracket below agreed across both sources.
+#   [IRC]  Statute, for the figures Congress fixed and never indexed.
+#
+# The OBBBA (P.L. 119-21, July 2025) made the TCJA rate structure permanent,
+# so the seven rates are stable and only the thresholds move with C-CPI-U.
+version: "2026.1"
+tax_year: 2026
+source: "Rev. Proc. 2025-32; IRC as amended by P.L. 119-21 (OBBBA)"
+
+ordinary:
+  single:
+    brackets:
+      - {up_to: 12400,  rate: "0.10"}
+      - {up_to: 50400,  rate: "0.12"}
+      - {up_to: 105700, rate: "0.22"}
+      - {up_to: 201775, rate: "0.24"}
+      - {up_to: 256225, rate: "0.32"}
+      - {up_to: 640600, rate: "0.35"}
+      - {up_to: null,   rate: "0.37"}
+  married_filing_jointly:
+    brackets:
+      - {up_to: 24800,  rate: "0.10"}
+      - {up_to: 100800, rate: "0.12"}
+      - {up_to: 211400, rate: "0.22"}
+      - {up_to: 403550, rate: "0.24"}
+      - {up_to: 512450, rate: "0.32"}
+      - {up_to: 768700, rate: "0.35"}
+      - {up_to: null,   rate: "0.37"}
+  married_filing_separately:
+    # Exactly half the joint thresholds, per the statutory construction.
+    brackets:
+      - {up_to: 12400,  rate: "0.10"}
+      - {up_to: 50400,  rate: "0.12"}
+      - {up_to: 105700, rate: "0.22"}
+      - {up_to: 201775, rate: "0.24"}
+      - {up_to: 256225, rate: "0.32"}
+      - {up_to: 384350, rate: "0.35"}
+      - {up_to: null,   rate: "0.37"}
+  head_of_household:
+    brackets:
+      - {up_to: 17700,  rate: "0.10"}
+      - {up_to: 67450,  rate: "0.12"}
+      - {up_to: 105700, rate: "0.22"}
+      - {up_to: 201775, rate: "0.24"}
+      - {up_to: 256200, rate: "0.32"}
+      - {up_to: 640600, rate: "0.35"}
+      - {up_to: null,   rate: "0.37"}
+
+capital_gains:
+  single:
+    brackets: [{up_to: 49450, rate: "0.00"}, {up_to: 545500, rate: "0.15"}, {up_to: null, rate: "0.20"}]
+  married_filing_jointly:
+    brackets: [{up_to: 98900, rate: "0.00"}, {up_to: 613700, rate: "0.15"}, {up_to: null, rate: "0.20"}]
+  married_filing_separately:
+    brackets: [{up_to: 49450, rate: "0.00"}, {up_to: 306850, rate: "0.15"}, {up_to: null, rate: "0.20"}]
+  head_of_household:
+    brackets: [{up_to: 66200, rate: "0.00"}, {up_to: 579600, rate: "0.15"}, {up_to: null, rate: "0.20"}]
+
+standard_deduction:
+  single: 16100
+  married_filing_jointly: 32200
+  married_filing_separately: 16100
+  head_of_household: 24150
+
+# IRC 1(h)(1)(E). The 25% is a ceiling, not a flat rate: a taxpayer whose
+# marginal ordinary rate is below 25% pays the lower rate on this slice.
+unrecaptured_1250_max_rate: "0.25"
+
+niit:
+  rate: "0.038"
+  citation: "IRC 1411"
+  inflation_indexed: false   # set by statute in 2013 and never indexed
+  thresholds:
+    single: 200000
+    married_filing_jointly: 250000
+    married_filing_separately: 125000
+    head_of_household: 200000
+
+passive_activity:
+  special_allowance: 25000
+  phaseout_rate: "0.50"      # $1 of allowance lost per $2 of MAGI over the start
+  citation: "IRC 469(i)"
+  inflation_indexed: false   # also frozen since 1986
+  phaseout_start:
+    single: 100000
+    married_filing_jointly: 100000
+    married_filing_separately: 50000
+    head_of_household: 100000
+
+bonus_depreciation:
+  citation: "IRC 168(k) as amended by P.L. 119-21; IRS Notice 2026-11"
+  # The OBBBA permanently restored 100% bonus, but the test is the ACQUISITION
+  # date, not the placed-in-service date. Property acquired on or before
+  # 19 Jan 2025 and placed in service later still rides the old phase-down.
+  permanent_rate: "1.00"
+  permanent_from_acquisition_date: "2025-01-19"
+  rate_by_year:
+    2022: "1.00"
+    2023: "0.80"
+    2024: "0.60"
+    2025: "0.40"
+    2026: "0.20"
+    2027: "0.00"
+
+section_121:
+  citation: "IRC 121"
+  ownership_years: "2"
+  use_years: "2"
+  lookback_years: "5"
+  nonqualified_use_from: 2009
+  exclusion:
+    single: 250000
+    married_filing_jointly: 500000
+    married_filing_separately: 250000
+    head_of_household: 250000
+
+qbi:
+  citation: "IRC 199A"
+  rate: "0.20"
+  safe_harbor: "Rev. Proc. 2019-38"
+  threshold:
+    single: 200000
+    married_filing_jointly: 400000
+    married_filing_separately: 200000
+    head_of_household: 200000
+
+verified:
+  ordinary: "IRS Newsroom Rev. Proc. 2025-32; cross-checked against Tax Foundation 2026 brackets"
+  capital_gains: "Tax Foundation 2026 brackets; cross-checked against published 0/15/20 thresholds"
+  standard_deduction: "IRS Newsroom Rev. Proc. 2025-32"
+  niit: "IRC 1411(b); thresholds unchanged since enactment"
+  passive_activity: "IRC 469(i)(2) and 469(i)(3)"
+  bonus_depreciation: "IRC 168(k); IRS Notice 2026-11 interim guidance"
+  unrecaptured_1250_max_rate: "IRC 1(h)(1)(E)"

@@ -1,0 +1,20 @@
+# Repo-wide lint config. The engine package has its own pyproject for
+# packaging, but ruff is run from the root across engine, scripts and tests,
+# so the shared rules live here.
+line-length = 90
+target-version = "py310"
+
+[lint]
+select = ["E", "F", "I", "UP", "B", "SIM", "C4", "DTZ", "EXE"]
+# DTZ001: fixed naive timestamps are deliberate. The demo household, its
+# attestations and its exported bundle must be byte-reproducible, and "now"
+# would make the ledger hash move on every run.
+ignore = ["E501", "DTZ001"]
+
+[lint.per-file-ignores]
+# Tests name their subject in the function name; long descriptive names and
+# repeated fixtures are the point.
+"tests/*" = ["B008"]
+# The scripts put packages/engine on sys.path before importing from it, so
+# module-level imports genuinely cannot all sit at the top.
+"scripts/*" = ["E402"]

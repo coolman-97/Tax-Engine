@@ -1,0 +1,11 @@
+code: TX
+name: Texas
+citation: "No state individual income tax"
+flat_rate: "0.00"
+taxes_capital_gains_as_ordinary: true
+conforms_to_section_1031: true
+conforms_to_bonus_depreciation: true
+notes: >
+  No individual income tax. Included because the comparison that matters most
+  to a California client is often "what if the replacement property is in
+  Texas" - and the answer involves the California clawback, not Texas.

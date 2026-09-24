@@ -1,0 +1,561 @@
+<title>Stand Behind</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+:root{
+  color-scheme: light;
+  --plane:#F1F2F5; --surface:#FAFAFB; --surface-2:#FFFFFF;
+  --ink:#14161A; --ink-2:#4A4F57; --ink-muted:#858B94;
+  --rule:#E3E5E9; --grid:#E3E5E9; --axis:#C6CAD1;
+  --accent:#2a78d6; --accent-ink:#1c5cab;
+  --st-attested:#0ca30c; --st-document:#2a78d6; --st-review:#fab219; --st-assumed:#d03b3b;
+  --s1:#2a78d6; --s2:#eb6834; --s3:#1baf7a; --s4:#eda100; --s5:#e87ba4;
+  --g1:#0d366b; --g2:#184f95; --g3:#2a78d6; --g4:#86b6ef;
+  --shadow:0 1px 2px rgba(20,22,26,.06), 0 8px 24px -12px rgba(20,22,26,.18);
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  color-scheme: dark;
+  --plane:#0D0E11; --surface:#16181C; --surface-2:#1C1F24;
+  --ink:#F2F4F7; --ink-2:#A8AEB8; --ink-muted:#7B828C;
+  --rule:#272A30; --grid:#24272D; --axis:#363A41;
+  --accent:#5598e7; --accent-ink:#86b6ef;
+  --st-attested:#0ca30c; --st-document:#5598e7; --st-review:#fab219; --st-assumed:#d03b3b;
+  --s1:#3987e5; --s2:#d95926; --s3:#199e70; --s4:#c98500; --s5:#d55181;
+  --g1:#184f95; --g2:#256abf; --g3:#5598e7; --g4:#9ec5f4;
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px -12px rgba(0,0,0,.6);
+}}
+:root[data-theme="dark"]{
+  color-scheme: dark;
+  --plane:#0D0E11; --surface:#16181C; --surface-2:#1C1F24;
+  --ink:#F2F4F7; --ink-2:#A8AEB8; --ink-muted:#7B828C;
+  --rule:#272A30; --grid:#24272D; --axis:#363A41;
+  --accent:#5598e7; --accent-ink:#86b6ef;
+  --st-attested:#0ca30c; --st-document:#5598e7; --st-review:#fab219; --st-assumed:#d03b3b;
+  --s1:#3987e5; --s2:#d95926; --s3:#199e70; --s4:#c98500; --s5:#d55181;
+  --g1:#184f95; --g2:#256abf; --g3:#5598e7; --g4:#9ec5f4;
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px -12px rgba(0,0,0,.6);
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0; background:var(--plane); color:var(--ink);
+  font-family:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  font-size:14px; line-height:1.55; -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:1180px; margin:0 auto; padding-inline:20px; padding-block:0 72px}
+h1,h2,h3{font-family:Newsreader,Georgia,"Times New Roman",serif; font-weight:500; text-wrap:balance; margin:0}
+.mono{font-family:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace; font-variant-numeric:tabular-nums}
+.num{font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace; font-variant-numeric:tabular-nums; letter-spacing:-.01em}
+
+/* ---------- masthead ---------- */
+header.mast{padding-block:44px 28px; border-bottom:1px solid var(--rule)}
+.eyebrow{font-size:11px; letter-spacing:.13em; text-transform:uppercase; color:var(--ink-muted); font-weight:500}
+h1{font-size:clamp(34px,5.4vw,52px); line-height:1.04; letter-spacing:-.02em; margin-block:10px 0}
+h1 em{font-style:italic; color:var(--accent-ink)}
+.standfirst{max-width:63ch; color:var(--ink-2); margin-top:16px; font-size:15px}
+.mast-meta{display:flex; flex-wrap:wrap; gap:8px 22px; margin-top:20px; font-size:11.5px; color:var(--ink-muted)}
+.mast-meta b{color:var(--ink-2); font-weight:500}
+
+/* ---------- nav ---------- */
+nav.tabs{position:sticky; top:env(safe-area-inset-top,0px); z-index:20; background:var(--plane);
+  border-bottom:1px solid var(--rule); display:flex; gap:2px; overflow-x:auto; margin-bottom:28px}
+nav.tabs button{appearance:none; background:none; border:0; border-bottom:2px solid transparent;
+  padding:13px 14px; font:inherit; font-size:12.5px; color:var(--ink-muted); cursor:pointer; white-space:nowrap}
+nav.tabs button:hover{color:var(--ink-2)}
+nav.tabs button[aria-selected="true"]{color:var(--ink); border-bottom-color:var(--accent); font-weight:500}
+nav.tabs button:focus-visible{outline:2px solid var(--accent); outline-offset:-2px}
+
+section[role=tabpanel]{animation:fade .22s ease}
+@keyframes fade{from{opacity:.4}to{opacity:1}}
+@media (prefers-reduced-motion:reduce){section[role=tabpanel]{animation:none}}
+
+h2{font-size:25px; letter-spacing:-.012em; margin-bottom:6px}
+h3{font-size:17px; letter-spacing:-.008em}
+.lede{color:var(--ink-2); max-width:70ch; margin:0 0 22px; font-size:14px}
+.panel{background:var(--surface); border:1px solid var(--rule); border-radius:3px; padding:22px}
+.panel + .panel{margin-top:18px}
+
+/* ---------- standing badges (status: colour + glyph + label, never colour alone) ---------- */
+.badge{display:inline-flex; align-items:center; gap:5px; font-size:10.5px; letter-spacing:.055em;
+  text-transform:uppercase; font-weight:600; padding:2px 7px 2px 5px; border-radius:2px;
+  border:1px solid; white-space:nowrap}
+.badge .g{font-size:11px; line-height:1}
+.b-attested{color:var(--st-attested); border-color:color-mix(in srgb,var(--st-attested) 38%,transparent); background:color-mix(in srgb,var(--st-attested) 9%,transparent)}
+.b-document{color:var(--st-document); border-color:color-mix(in srgb,var(--st-document) 38%,transparent); background:color-mix(in srgb,var(--st-document) 9%,transparent)}
+.b-review  {color:var(--st-review);   border-color:color-mix(in srgb,var(--st-review) 46%,transparent);   background:color-mix(in srgb,var(--st-review) 12%,transparent)}
+.b-assumed {color:var(--st-assumed);  border-color:color-mix(in srgb,var(--st-assumed) 40%,transparent);  background:color-mix(in srgb,var(--st-assumed) 9%,transparent)}
+
+/* ---------- property ledger ---------- */
+.ledger{display:grid; gap:1px; background:var(--rule); border:1px solid var(--rule); border-radius:3px; overflow:hidden}
+.lrow{background:var(--surface); padding:16px 18px; display:grid; grid-template-columns:1.6fr repeat(4,minmax(86px,.75fr)); gap:14px; align-items:baseline}
+.lrow.head{background:var(--surface-2); font-size:10.5px; letter-spacing:.09em; text-transform:uppercase; color:var(--ink-muted); font-weight:600; padding-block:9px}
+.lrow .addr{font-weight:500}
+.lrow .sub{display:block; font-size:12px; color:var(--ink-muted); font-weight:400; margin-top:3px; line-height:1.4}
+.lrow .v{text-align:right; font-size:13.5px}
+.lrow .v span{display:block; font-size:10px; letter-spacing:.06em; text-transform:uppercase; color:var(--ink-muted); margin-bottom:2px}
+.hard{grid-column:1/-1; font-size:12.5px; color:var(--ink-2); border-top:1px dashed var(--rule); padding-top:11px; margin-top:3px}
+.hard b{color:var(--ink); font-weight:500}
+@media(max-width:820px){.lrow{grid-template-columns:1fr 1fr} .lrow.head{display:none} .lrow .v{text-align:left}}
+
+/* ---------- the gate ---------- */
+.gate{border:1px solid color-mix(in srgb,var(--st-assumed) 34%,var(--rule)); border-left:3px solid var(--st-assumed);
+  background:var(--surface); border-radius:3px; padding:24px 26px}
+.gate.ok{border-color:color-mix(in srgb,var(--st-attested) 34%,var(--rule)); border-left-color:var(--st-attested)}
+.gate-h{display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom:12px}
+.gate-h .t{font-family:Newsreader,Georgia,serif; font-size:23px; letter-spacing:-.01em}
+.gate p.say{font-size:15px; color:var(--ink); max-width:72ch; margin:0 0 4px}
+.q{border-top:1px solid var(--rule); padding-top:18px; margin-top:18px}
+.q .qh{display:flex; justify-content:space-between; gap:16px; align-items:baseline; flex-wrap:wrap}
+.q .qp{font-weight:500; max-width:60ch}
+.q .impact{font-size:19px; color:var(--st-assumed)}
+.q .impact span{font-size:10px; letter-spacing:.07em; text-transform:uppercase; color:var(--ink-muted); display:block; text-align:right}
+.q .why{font-size:13px; color:var(--ink-2); max-width:72ch; margin:9px 0 14px}
+.cands{display:grid; gap:1px; background:var(--rule); border:1px solid var(--rule); border-radius:3px; overflow:hidden}
+.cand{background:var(--surface-2); padding:12px 14px; display:grid; grid-template-columns:auto 1fr; gap:4px 14px; align-items:baseline}
+.cand .cv{font-size:15px; font-weight:500}
+.cand .cs{font-size:11px; color:var(--ink-muted); letter-spacing:.04em}
+.cand .ci{grid-column:1/-1; font-size:12.5px; color:var(--ink-2); line-height:1.5}
+.quote{font-family:"IBM Plex Mono",monospace; font-size:12px; background:var(--plane); border-left:2px solid var(--axis);
+  padding:7px 11px; margin-top:8px; color:var(--ink-2); overflow-x:auto; white-space:pre}
+.attest-btn{appearance:none; margin-top:20px; background:var(--ink); color:var(--surface); border:0; border-radius:2px;
+  padding:11px 20px; font:inherit; font-size:13px; font-weight:500; cursor:pointer}
+.attest-btn:hover{background:var(--accent-ink)}
+.attest-btn:focus-visible{outline:2px solid var(--accent); outline-offset:2px}
+.attest-note{font-size:12.5px; color:var(--ink-muted); margin-top:12px; max-width:74ch; line-height:1.6}
+
+/* ---------- figures / charts ---------- */
+figure{margin:0}
+figcaption{font-size:12.5px; color:var(--ink-2); margin-top:12px; max-width:74ch}
+svg{display:block; width:100%; height:auto; overflow:visible}
+.ax{font-size:10.5px; fill:var(--ink-muted); font-family:"IBM Plex Mono",monospace}
+.dl{font-size:11px; fill:var(--ink-2); font-family:"IBM Plex Sans",sans-serif; font-weight:500}
+.legend{display:flex; flex-wrap:wrap; gap:6px 18px; margin:14px 0 0; font-size:12px; color:var(--ink-2)}
+.legend i{width:11px; height:11px; border-radius:2px; display:inline-block; margin-right:6px; vertical-align:-1px}
+
+table{width:100%; border-collapse:collapse; font-size:13px}
+th,td{text-align:right; padding:9px 10px; border-bottom:1px solid var(--rule)}
+th:first-child,td:first-child{text-align:left}
+thead th{font-size:10.5px; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-muted); font-weight:600}
+tbody tr:hover{background:var(--surface-2)}
+td.best{color:var(--st-attested); font-weight:600}
+.scroll{overflow-x:auto; -webkit-overflow-scrolling:touch}
+
+.chips{display:flex; flex-wrap:wrap; gap:6px; margin-bottom:18px}
+.chip{appearance:none; background:var(--surface); border:1px solid var(--rule); border-radius:2px; padding:7px 12px;
+  font:inherit; font-size:12.5px; color:var(--ink-2); cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--ink); color:var(--surface); border-color:var(--ink)}
+.chip:focus-visible{outline:2px solid var(--accent); outline-offset:1px}
+
+/* ---------- timeline ---------- */
+.tl{display:grid; gap:1px; background:var(--rule); border:1px solid var(--rule); border-radius:3px; overflow:hidden}
+.tl div{background:var(--surface); padding:12px 16px; display:grid; grid-template-columns:62px 1fr; gap:14px; font-size:13px; align-items:baseline}
+.tl div .y{color:var(--accent-ink); font-weight:600}
+.tl div em{font-style:normal; color:var(--ink); font-weight:500}
+
+/* ---------- provenance drawer ---------- */
+.drawer{position:fixed; inset:0; z-index:60; display:grid; place-items:end center; background:rgba(10,12,16,.42); padding:0}
+.drawer[hidden]{display:none!important}
+.drawer-in{background:var(--surface); width:min(720px,100%); max-height:82vh; overflow:auto; border-radius:4px 4px 0 0;
+  padding:24px 26px calc(26px + env(safe-area-inset-bottom,0px)); box-shadow:var(--shadow)}
+.tree{list-style:none; margin:14px 0 0; padding:0}
+.tree ul{list-style:none; margin:0; padding-left:20px; border-left:1px solid var(--rule)}
+.tree li{padding:9px 0 9px 12px}
+.tree .nm{font-size:13px; font-weight:500}
+.tree .vl{font-size:13px}
+.tree .ds{font-size:12px; color:var(--ink-2); margin-top:3px; max-width:66ch; line-height:1.5}
+.x{appearance:none; background:none; border:1px solid var(--rule); border-radius:2px; color:var(--ink-2);
+  padding:5px 11px; font:inherit; font-size:12px; cursor:pointer}
+
+.note{font-size:12.5px; color:var(--ink-muted); border-top:1px solid var(--rule); padding-top:14px; margin-top:22px; max-width:78ch}
+.kbd{font-family:"IBM Plex Mono",monospace; font-size:11.5px; background:var(--plane); border:1px solid var(--rule); border-radius:2px; padding:1px 5px}
+.hl{background:color-mix(in srgb,var(--st-review) 22%,transparent); padding:0 2px; border-radius:1px}
+</style>
+
+<div class="wrap">
+<header class="mast">
+  <div class="eyebrow">Deterministic real-estate tax engine</div>
+  <h1>Every number here has<br>someone <em>behind it</em>.</h1>
+  <p class="standfirst">An advisor is about to tell a client what to do with a third of their net worth,
+  and they will defend the number out loud with their license behind it. So this engine treats
+  <em>where a number came from</em> as a property of the number. When an input is not attested,
+  it does not return a figure with an asterisk &mdash; it refuses, and hands back the shortest list of
+  questions that would unblock it, priced.</p>
+  <div class="mast-meta" id="meta"></div>
+</header>
+
+<nav class="tabs" role="tablist" id="tabs"></nav>
+<main id="main"></main>
+
+<p class="note">Figures are computed by the Python engine in <span class="kbd">packages/engine</span> and exported as a
+scenario bundle; this page renders that bundle and never does tax arithmetic of its own. Every amount is carried as
+integer cents. The household and its documents are synthetic.</p>
+</div>
+
+<div class="drawer" id="drawer" hidden>
+  <div class="drawer-in" role="dialog" aria-modal="true" aria-labelledby="dtitle">
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:16px">
+      <h3 id="dtitle">Show your work</h3>
+      <button class="x" id="dclose">Close</button>
+    </div>
+    <p class="lede" style="margin:10px 0 0">Every figure traces back to a document page, a named attestation,
+    or a stated assumption. A derived number is exactly as defensible as its weakest input.</p>
+    <div id="dbody"></div>
+  </div>
+</div>
+
+<script id="scenario" type="application/json">{"generated":"2026-09-23T17:00:00","engineVersion":"2026.1","ruleSource":"Rev. Proc. 2025-32; IRC as amended by P.L. 119-21 (OBBBA)","household":{"name":"The Okafor Household","filingStatus":"Married filing jointly","state":"CA","wages":{"cents":31000000,"dollars":310000.0,"text":"$310,000.00"},"portfolioIncome":{"cents":2200000,"dollars":22000.0,"text":"$22,000.00"},"suspendedPassiveLosses":{"cents":35020000,"dollars":350200.0,"text":"$350,200.00"}},"properties":[{"id":"pasadena","address":"1842 Casitas Ave, Pasadena CA 91103","state":"CA","acquired":"2009-06-01","placedInService":"2009-06-15","acquisitionKind":"purchase","marketValue":{"cents":142000000,"dollars":1420000.0,"text":"$1,420,000.00"},"originalBasis":{"cents":59680000,"dollars":596800.0,"text":"$596,800.00"},"landAllocation":{"cents":20500000,"dollars":205000.0,"text":"$205,000.00"},"landRatio":0.34349865951742625,"adjustedBasis":{"cents":41547181,"dollars":415471.81,"text":"$415,471.81"},"accumulated1250":{"cents":26532819,"dollars":265328.19,"text":"$265,328.19"},"accumulated1245":{"cents":0,"dollars":0.0,"text":"$0.00"},"additional1250":{"cents":0,"dollars":0.0,"text":"$0.00"},"debt":{"cents":43800000,"dollars":438000.0,"text":"$438,000.00"},"equity":{"cents":98200000,"dollars":982000.0,"text":"$982,000.00"},"lendableEquity":{"cents":55600000,"dollars":556000.0,"text":"$556,000.00"},"annualRents":{"cents":8640000,"dollars":86400.0,"text":"$86,400.00"},"annualExpenses":{"cents":2900000,"dollars":29000.0,"text":"$29,000.00"},"depreciationThisYear":{"cents":1730181,"dollars":17301.81,"text":"$17,301.81"},"depreciationExhausted":2043,"hasCostSeg":false,"whatMakesItHard":"Interest-only note converts to amortising in 2027 - the payment jumps 75%.","liens":[{"position":1,"description":"purchase-money first, interest-only to 2027","balance":{"cents":43800000,"dollars":438000.0,"text":"$438,000.00"},"released":false,"releaseCost":{"cents":0,"dollars":0.0,"text":"$0.00"}}],"schedules":[{"label":"building","basis":{"cents":39180000,"dollars":391800.0,"text":"$391,800.00"},"recapture":"1250","method":"SL","years":"residential rental","citation":"IRC 168(b)(3)(B), 168(c), 168(d)(2)(B), 168(e)(2)(A)","byYear":[{"year":2009,"amount":7717.27},{"year":2010,"amount":14247.28},{"year":2011,"amount":14247.27},{"year":2012,"amount":14247.27},{"year":2013,"amount":14247.27},{"year":2014,"amount":14247.28},{"year":2015,"amount":14247.27},{"year":2016,"amount":14247.27},{"year":2017,"amount":14247.27},{"year":2018,"amount":14247.28},{"year":2019,"amount":14247.27},{"year":2020,"amount":14247.27},{"year":2021,"amount":14247.28},{"year":2022,"amount":14247.27},{"year":2023,"amount":14247.27},{"year":2024,"amount":14247.27},{"year":2025,"amount":14247.28},{"year":2026,"amount":14247.27},{"year":2027,"amount":14247.27},{"year":2028,"amount":14247.27},{"year":2029,"amount":14247.28},{"year":2030,"amount":14247.27},{"year":2031,"amount":14247.27},{"year":2032,"amount":14247.28},{"year":2033,"amount":14247.27},{"year":2034,"amount":14247.27},{"year":2035,"amount":14247.27},{"year":2036,"amount":13653.64}]},{"label":"improvement: seismic retrofit + roof","basis":{"cents":8400000,"dollars":84000.0,"text":"$84,000.00"},"recapture":"1250","method":"SL","years":"residential rental","citation":"IRC 168(b)(3)(B), 168(c), 168(d)(2)(B), 168(e)(2)(A)","byYear":[{"year":2016,"amount":2163.64},{"year":2017,"amount":3054.54},{"year":2018,"amount":3054.55},{"year":2019,"amount":3054.54},{"year":2020,"amount":3054.55},{"year":2021,"amount":3054.54},{"year":2022,"amount":3054.55},{"year":2023,"amount":3054.54},{"year":2024,"amount":3054.55},{"year":2025,"amount":3054.55},{"year":2026,"amount":3054.54},{"year":2027,"amount":3054.55},{"year":2028,"amount":3054.54},{"year":2029,"amount":3054.55},{"year":2030,"amount":3054.54},{"year":2031,"amount":3054.55},{"year":2032,"amount":3054.54},{"year":2033,"amount":3054.55},{"year":2034,"amount":3054.54},{"year":2035,"amount":3054.55},{"year":2036,"amount":3054.55},{"year":2037,"amount":3054.54},{"year":2038,"amount":3054.55},{"year":2039,"amount":3054.54},{"year":2040,"amount":3054.55},{"year":2041,"amount":3054.54},{"year":2042,"amount":3054.55},{"year":2043,"amount":2418.18}]}]},{"id":"austin","address":"4412 Ramsey Ave, Austin TX 78756","state":"TX","acquired":"2021-03-12","placedInService":"2021-04-01","acquisitionKind":"purchase","marketValue":{"cents":74200000,"dollars":742000.0,"text":"$742,000.00"},"originalBasis":{"cents":62630000,"dollars":626300.0,"text":"$626,300.00"},"landAllocation":{"cents":12240000,"dollars":122400.0,"text":"$122,400.00"},"landRatio":0.19543349832348714,"adjustedBasis":{"cents":43559894,"dollars":435598.94,"text":"$435,598.94"},"accumulated1250":{"cents":11170106,"dollars":111701.06,"text":"$111,701.06"},"accumulated1245":{"cents":7900000,"dollars":79000.0,"text":"$79,000.00"},"additional1250":{"cents":3290000,"dollars":32900.0,"text":"$32,900.00"},"debt":{"cents":40453156,"dollars":404531.56,"text":"$404,531.56"},"equity":{"cents":33746844,"dollars":337468.44,"text":"$337,468.44"},"lendableEquity":{"cents":11486844,"dollars":114868.44,"text":"$114,868.44"},"annualRents":{"cents":4320000,"dollars":43200.0,"text":"$43,200.00"},"annualExpenses":{"cents":1900000,"dollars":19000.0,"text":"$19,000.00"},"depreciationThisYear":{"cents":1374182,"dollars":13741.82,"text":"$13,741.82"},"depreciationExhausted":2048,"hasCostSeg":true,"whatMakesItHard":"Cost segregation with 100% bonus. 40% of the exit gain is ordinary income, not 25% gain.","liens":[{"position":1,"description":"5/1 ARM, 2/2/5 caps, reset April 2026","balance":{"cents":40453156,"dollars":404531.56,"text":"$404,531.56"},"released":false,"releaseCost":{"cents":0,"dollars":0.0,"text":"$0.00"}}],"schedules":[{"label":"building","basis":{"cents":37790000,"dollars":377900.0,"text":"$377,900.00"},"recapture":"1250","method":"SL","years":"residential rental","citation":"IRC 168(b)(3)(B), 168(c), 168(d)(2)(B), 168(e)(2)(A)","byYear":[{"year":2021,"amount":9733.79},{"year":2022,"amount":13741.82},{"year":2023,"amount":13741.81},{"year":2024,"amount":13741.82},{"year":2025,"amount":13741.82},{"year":2026,"amount":13741.82},{"year":2027,"amount":13741.82},{"year":2028,"amount":13741.82},{"year":2029,"amount":13741.81},{"year":2030,"amount":13741.82},{"year":2031,"amount":13741.82},{"year":2032,"amount":13741.82},{"year":2033,"amount":13741.82},{"year":2034,"amount":13741.81},{"year":2035,"amount":13741.82},{"year":2036,"amount":13741.82},{"year":2037,"amount":13741.82},{"year":2038,"amount":13741.82},{"year":2039,"amount":13741.82},{"year":2040,"amount":13741.81},{"year":2041,"amount":13741.82},{"year":2042,"amount":13741.82},{"year":2043,"amount":13741.82},{"year":2044,"amount":13741.82},{"year":2045,"amount":13741.81},{"year":2046,"amount":13741.82},{"year":2047,"amount":13741.82},{"year":2048,"amount":10878.94}]},{"label":"5-year personal property","basis":{"cents":5800000,"dollars":58000.0,"text":"$58,000.00"},"recapture":"1245","method":"200DB","years":"5-year personal property","citation":"IRC 168(e)(3)(B); 1245(a)(3)(A)","byYear":[{"year":2021,"amount":58000.0}]},{"label":"7-year personal property","basis":{"cents":2100000,"dollars":21000.0,"text":"$21,000.00"},"recapture":"1245","method":"200DB","years":"7-year personal property","citation":"IRC 168(e)(3)(C); 1245(a)(3)(A)","byYear":[{"year":2021,"amount":21000.0}]},{"label":"15-year land improvements","basis":{"cents":4700000,"dollars":47000.0,"text":"$47,000.00"},"recapture":"1250","method":"150DB","years":"15-year land improvements","citation":"IRC 168(e)(1) via Rev. Proc. 87-56 asset class 00.3 (class life 20 -> GDS 15); section 1250(c) per Reg. 1.48-1(c)","byYear":[{"year":2021,"amount":47000.0}]}]},{"id":"long_beach","address":"1247 Ocean Blvd, Long Beach CA 90802","state":"CA","acquired":"2018-02-14","placedInService":"2018-03-01","acquisitionKind":"inheritance","marketValue":{"cents":164000000,"dollars":1640000.0,"text":"$1,640,000.00"},"originalBasis":{"cents":112000000,"dollars":1120000.0,"text":"$1,120,000.00"},"landAllocation":{"cents":33600000,"dollars":336000.0,"text":"$336,000.00"},"landRatio":0.3,"adjustedBasis":{"cents":89786667,"dollars":897866.67,"text":"$897,866.67"},"accumulated1250":{"cents":22213333,"dollars":222133.33,"text":"$222,133.33"},"accumulated1245":{"cents":0,"dollars":0.0,"text":"$0.00"},"additional1250":{"cents":0,"dollars":0.0,"text":"$0.00"},"debt":{"cents":15455993,"dollars":154559.93,"text":"$154,559.93"},"equity":{"cents":148544007,"dollars":1485440.07,"text":"$1,485,440.07"},"lendableEquity":{"cents":99344007,"dollars":993440.07,"text":"$993,440.07"},"annualRents":{"cents":12240000,"dollars":122400.0,"text":"$122,400.00"},"annualExpenses":{"cents":5370000,"dollars":53700.0,"text":"$53,700.00"},"depreciationThisYear":{"cents":2850909,"dollars":28509.09,"text":"$28,509.09"},"depreciationExhausted":2045,"hasCostSeg":false,"whatMakesItHard":"Inherited at a stepped-up basis. Four paid-off liens still on title. HELOC in its draw period.","liens":[{"position":1,"description":"HELOC, draw period through 2032","balance":{"cents":15455993,"dollars":154559.93,"text":"$154,559.93"},"released":false,"releaseCost":{"cents":0,"dollars":0.0,"text":"$0.00"}},{"position":2,"description":"paid-off second from 2019, never reconveyed","balance":{"cents":0,"dollars":0.0,"text":"$0.00"},"released":false,"releaseCost":{"cents":17500,"dollars":175.0,"text":"$175.00"}},{"position":3,"description":"satisfied mechanics lien (2020 roof contractor)","balance":{"cents":0,"dollars":0.0,"text":"$0.00"},"released":false,"releaseCost":{"cents":45000,"dollars":450.0,"text":"$450.00"}},{"position":4,"description":"solar UCC-1 fixture filing, paid off 2023","balance":{"cents":0,"dollars":0.0,"text":"$0.00"},"released":false,"releaseCost":{"cents":12500,"dollars":125.0,"text":"$125.00"}},{"position":5,"description":"county nuisance abatement lien, satisfied 2021","balance":{"cents":0,"dollars":0.0,"text":"$0.00"},"released":false,"releaseCost":{"cents":31000,"dollars":310.0,"text":"$310.00"}}],"schedules":[{"label":"building","basis":{"cents":78400000,"dollars":784000.0,"text":"$784,000.00"},"recapture":"1250","method":"SL","years":"residential rental","citation":"IRC 168(b)(3)(B), 168(c), 168(d)(2)(B), 168(e)(2)(A)","byYear":[{"year":2018,"amount":22569.7},{"year":2019,"amount":28509.09},{"year":2020,"amount":28509.09},{"year":2021,"amount":28509.09},{"year":2022,"amount":28509.09},{"year":2023,"amount":28509.09},{"year":2024,"amount":28509.09},{"year":2025,"amount":28509.09},{"year":2026,"amount":28509.09},{"year":2027,"amount":28509.1},{"year":2028,"amount":28509.09},{"year":2029,"amount":28509.09},{"year":2030,"amount":28509.09},{"year":2031,"amount":28509.09},{"year":2032,"amount":28509.09},{"year":2033,"amount":28509.09},{"year":2034,"amount":28509.09},{"year":2035,"amount":28509.09},{"year":2036,"amount":28509.09},{"year":2037,"amount":28509.09},{"year":2038,"amount":28509.1},{"year":2039,"amount":28509.09},{"year":2040,"amount":28509.09},{"year":2041,"amount":28509.09},{"year":2042,"amount":28509.09},{"year":2043,"amount":28509.09},{"year":2044,"amount":28509.09},{"year":2045,"amount":20193.94}]}]},{"id":"silver_lake","address":"2907 Rowena Ave, Los Angeles CA 90039","state":"CA","acquired":"2011-08-01","placedInService":"2019-09-01","acquisitionKind":"purchase","marketValue":{"cents":118500000,"dollars":1185000.0,"text":"$1,185,000.00"},"originalBasis":{"cents":54920000,"dollars":549200.0,"text":"$549,200.00"},"landAllocation":{"cents":24300000,"dollars":243000.0,"text":"$243,000.00"},"landRatio":0.44246176256372904,"adjustedBasis":{"cents":47914515,"dollars":479145.15,"text":"$479,145.15"},"accumulated1250":{"cents":7005485,"dollars":70054.85,"text":"$70,054.85"},"accumulated1245":{"cents":0,"dollars":0.0,"text":"$0.00"},"additional1250":{"cents":0,"dollars":0.0,"text":"$0.00"},"debt":{"cents":33955177,"dollars":339551.77,"text":"$339,551.77"},"equity":{"cents":84544823,"dollars":845448.23,"text":"$845,448.23"},"lendableEquity":{"cents":48994823,"dollars":489948.23,"text":"$489,948.23"},"annualRents":{"cents":6000000,"dollars":60000.0,"text":"$60,000.00"},"annualExpenses":{"cents":2230000,"dollars":22300.0,"text":"$22,300.00"},"depreciationThisYear":{"cents":1113454,"dollars":11134.54,"text":"$11,134.54"},"depreciationExhausted":2047,"hasCostSeg":false,"whatMakesItHard":"A former home. The section 121 clock is running out and depreciation is never excludable.","liens":[{"position":1,"description":"30-year fixed, refinanced 2020","balance":{"cents":33955177,"dollars":339551.77,"text":"$339,551.77"},"released":false,"releaseCost":{"cents":0,"dollars":0.0,"text":"$0.00"}}],"schedules":[{"label":"building","basis":{"cents":30620000,"dollars":306200.0,"text":"$306,200.00"},"recapture":"1250","method":"SL","years":"residential rental","citation":"IRC 168(b)(3)(B), 168(c), 168(d)(2)(B), 168(e)(2)(A)","byYear":[{"year":2019,"amount":3247.58},{"year":2020,"amount":11134.54},{"year":2021,"amount":11134.55},{"year":2022,"amount":11134.54},{"year":2023,"amount":11134.55},{"year":2024,"amount":11134.54},{"year":2025,"amount":11134.55},{"year":2026,"amount":11134.54},{"year":2027,"amount":11134.55},{"year":2028,"amount":11134.54},{"year":2029,"amount":11134.55},{"year":2030,"amount":11134.55},{"year":2031,"amount":11134.54},{"year":2032,"amount":11134.55},{"year":2033,"amount":11134.54},{"year":2034,"amount":11134.55},{"year":2035,"amount":11134.54},{"year":2036,"amount":11134.55},{"year":2037,"amount":11134.54},{"year":2038,"amount":11134.55},{"year":2039,"amount":11134.54},{"year":2040,"amount":11134.55},{"year":2041,"amount":11134.55},{"year":2042,"amount":11134.54},{"year":2043,"amount":11134.55},{"year":2044,"amount":11134.54},{"year":2045,"amount":11134.55},{"year":2046,"amount":11134.54},{"year":2047,"amount":2319.7}]}]}],"strategies":[{"name":"Hold","description":"Keep every property for the full horizon.","terminalNetWorth":{"cents":1152816462,"dollars":11528164.62,"text":"$11,528,164.62"},"cumulativeTax":{"cents":424180518,"dollars":4241805.18,"text":"$4,241,805.18"},"npv":{"cents":122991095,"dollars":1229910.95,"text":"$1,229,910.95"},"ledgerHash":"04dce731818da4d3a2e3d27356fcb8f2","years":[{"year":2026,"value":4987000.0,"debt":1336643.26,"equity":3650356.74,"netWorth":3636846.78,"cashFlow":76242.82,"afterTaxCashFlow":-13509.96,"tax":89752.78,"federalTax":66234.16,"stateTax":23518.62,"niit":1963.72,"suspendedLosses":350200.0,"releasedLosses":0.0,"events":["austin: rate resets 3.250% -> 5.250% on 2026-04-01","austin: PAYMENT SHOCK on 2026-04-01 - $1,997.60/mo becomes $2,456.43/mo (+23%)"]},{"year":2027,"value":5166739.0,"debt":1308295.09,"equity":3858443.91,"netWorth":3821047.53,"cashFlow":66276.99,"afterTaxCashFlow":-23886.42,"tax":90163.41,"federalTax":66383.4,"stateTax":23780.01,"niit":1806.42,"suspendedLosses":350200.0,"releasedLosses":0.0,"events":["austin: rate resets 5.250% -> 7.250% on 2027-04-01","austin: PAYMENT SHOCK on 2027-04-01 - $2,456.43/mo becomes $2,947.39/mo (+20%)","pasadena: PAYMENT SHOCK on 2027-07-01 - $1,551.25/mo becomes $2,712.25/mo (+75%)"]},{"year":2028,"value":5352987.02,"debt":1271622.45,"equity":4081364.57,"netWorth":4011166.52,"cashFlow":59925.2,"afterTaxCashFlow":-32801.67,"tax":92726.87,"federalTax":68141.19,"stateTax":24585.68,"niit":1866.06,"suspendedLosses":350200.0,"releasedLosses":0.0,"events":["austin: rate resets 7.250% -> 7.500% on 2028-04-01"]},{"year":2029,"value":5545981.02,"debt":1233764.05,"equity":4312216.97,"netWorth":4207958.29,"cashFlow":62221.84,"afterTaxCashFlow":-34060.63,"tax":96282.47,"federalTax":70638.52,"stateTax":25643.95,"niit":2021.36,"suspendedLosses":350200.0,"releasedLosses":0.0,"events":[]},{"year":2030,"value":5745966.67,"debt":1194555.52,"equity":4551411.15,"netWorth":4411714.02,"cashFlow":64518.62,"afterTaxCashFlow":-35438.45,"tax":99957.07,"federalTax":73221.07,"stateTax":26736.0,"niit":2182.73,"suspendedLosses":350200.0,"releasedLosses":0.0,"events":[]},{"year":2031,"value":5953198.61,"debt":1153907.55,"equity":4799291.06,"netWorth":4622566.99,"cashFlow":66603.78,"afterTaxCashFlow":-37026.94,"tax":103630.72,"federalTax":75797.89,"stateTax":27832.83,"niit":2340.02,"suspendedLosses":350200.0,"releasedLosses":0.0,"events":[]},{"year":2032,"value":6167940.87,"debt":1113655.04,"equity":5054285.83,"netWorth":4840747.52,"cashFlow":70487.79,"afterTaxCashFlow":-36814.24,"tax":107302.03,"federalTax":78369.17,"stateTax":28932.86,"niit":2490.5,"suspendedLosses":350200.0,"releasedLosses":0.0,"events":[]},{"year":2033,"value":6390467.06,"debt":1071564.81,"equity":5318902.25,"netWorth":5065989.73,"cashFlow":71571.39,"afterTaxCashFlow":-39374.21,"tax":110945.6,"federalTax":80915.54,"stateTax":30030.06,"niit":2633.39,"suspendedLosses":350200.0,"releasedLosses":0.0,"events":[]},{"year":2034,"value":6621060.9,"debt":1027328.39,"equity":5593732.51,"netWorth":5298588.52,"cashFlow":72362.54,"afterTaxCashFlow":-42231.47,"tax":114594.01,"federalTax":83460.64,"stateTax":31133.37,"niit":2770.24,"suspendedLosses":350200.0,"releasedLosses":0.0,"events":[]},{"year":2035,"value":6860016.47,"debt":980821.29,"equity":5879195.18,"netWorth":5538641.13,"cashFlow":72824.32,"afterTaxCashFlow":-45410.06,"tax":118234.38,"federalTax":85993.76,"stateTax":32240.62,"niit":2899.94,"suspendedLosses":350200.0,"releasedLosses":0.0,"events":[]},{"year":2036,"value":7107638.67,"debt":931910.97,"equity":6175727.7,"netWorth":5786023.48,"cashFlow":72916.2,"afterTaxCashFlow":-49150.17,"tax":122066.37,"federalTax":88666.44,"stateTax":33399.93,"niit":3043.85,"suspendedLosses":350200.0,"releasedLosses":0.0,"events":[]},{"year":2037,"value":7364243.55,"debt":880456.11,"equity":6483787.44,"netWorth":6035973.02,"cashFlow":72593.7,"afterTaxCashFlow":-58110.2,"tax":130703.9,"federalTax":94935.95,"stateTax":35767.95,"niit":3674.34,"suspendedLosses":350200.0,"releasedLosses":0.0,"events":[]},{"year":2038,"value":7630158.78,"debt":826306.25,"equity":6803852.53,"netWorth":6293608.88,"cashFlow":71808.12,"afterTaxCashFlow":-62429.23,"tax":134237.35,"federalTax":97375.47,"stateTax":36861.88,"niit":3774.81,"suspendedLosses":350200.0,"releasedLosses":0.0,"events":[]},{"year":2039,"value":7905724.05,"debt":769300.81,"equity":7136423.24,"netWorth":6558986.81,"cashFlow":70505.99,"afterTaxCashFlow":-67192.78,"tax":137698.77,"federalTax":99755.31,"stateTax":37943.46,"niit":3862.48,"suspendedLosses":350200.0,"releasedLosses":0.0,"events":[]},{"year":2040,"value":8191291.5,"debt":709268.65,"equity":7482022.85,"netWorth":6832124.89,"cashFlow":68628.75,"afterTaxCashFlow":-72461.53,"tax":141090.28,"federalTax":102076.77,"stateTax":39013.51,"niit":3935.53,"suspendedLosses":350200.0,"releasedLosses":0.0,"events":[]},{"year":2041,"value":8487226.23,"debt":646027.19,"equity":7841199.04,"netWorth":7113029.25,"cashFlow":66112.23,"afterTaxCashFlow":-78271.83,"tax":144384.06,"federalTax":104320.93,"stateTax":40063.13,"niit":3991.99,"suspendedLosses":350200.0,"releasedLosses":0.0,"events":[]},{"year":2042,"value":8793906.76,"debt":579381.51,"equity":8214525.25,"netWorth":7401671.02,"cashFlow":62886.26,"afterTaxCashFlow":-84684.44,"tax":147570.7,"federalTax":106478.44,"stateTax":41092.26,"niit":4029.67,"suspendedLosses":350200.0,"releasedLosses":0.0,"events":[]},{"year":2043,"value":9111725.43,"debt":509123.6,"equity":8602601.83,"netWorth":7697773.05,"cashFlow":58873.89,"afterTaxCashFlow":-91974.55,"tax":150848.44,"federalTax":108698.25,"stateTax":42150.19,"niit":4070.35,"suspendedLosses":350200.0,"releasedLosses":0.0,"events":["pasadena: depreciation schedule exhausted - the shelter ends and taxable rental income steps up with no change to the property"]},{"year":2044,"value":9441089.13,"debt":435031.39,"equity":9006057.74,"netWorth":8000578.46,"cashFlow":53990.98,"afterTaxCashFlow":-100650.5,"tax":154641.48,"federalTax":111299.2,"stateTax":43342.28,"niit":4154.93,"suspendedLosses":350200.0,"releasedLosses":0.0,"events":[]},{"year":2045,"value":9782419.57,"debt":356867.54,"equity":9425552.03,"netWorth":8307810.88,"cashFlow":48145.47,"afterTaxCashFlow":-112261.87,"tax":160407.34,"federalTax":115371.81,"stateTax":45035.53,"niit":4436.87,"suspendedLosses":350200.0,"releasedLosses":0.0,"events":["long_beach: depreciation schedule exhausted - the shelter ends and taxable rental income steps up with no change to the property"]},{"year":2046,"value":10136154.07,"debt":274378.58,"equity":9861775.49,"netWorth":8614875.49,"cashFlow":41236.68,"afterTaxCashFlow":-129158.85,"tax":170395.53,"federalTax":122602.47,"stateTax":47793.06,"niit":5140.31,"suspendedLosses":350200.0,"releasedLosses":0.0,"events":[]},{"year":2047,"value":10502745.97,"debt":200952.45,"equity":10301793.52,"netWorth":8928489.57,"cashFlow":49429.15,"afterTaxCashFlow":-126403.95,"tax":175833.1,"federalTax":126416.46,"stateTax":49416.64,"niit":5372.43,"suspendedLosses":350200.0,"releasedLosses":0.0,"events":["silver_lake: depreciation schedule exhausted - the shelter ends and taxable rental income steps up with no change to the property"]},{"year":2048,"value":10882665.29,"debt":142762.2,"equity":10739903.09,"netWorth":9243669.83,"cashFlow":56325.32,"afterTaxCashFlow":-122929.31,"tax":179254.63,"federalTax":128712.75,"stateTax":50541.88,"niit":5388.87,"suspendedLosses":350200.0,"releasedLosses":0.0,"events":["austin: depreciation schedule exhausted - the shelter ends and taxable rental income steps up with no change to the property"]},{"year":2049,"value":11276399.36,"debt":80840.49,"equity":11195558.87,"netWorth":9560461.94,"cashFlow":45523.73,"afterTaxCashFlow":-138863.67,"tax":184387.4,"federalTax":132285.96,"stateTax":52101.44,"niit":5570.41,"suspendedLosses":350200.0,"releasedLosses":0.0,"events":[]},{"year":2050,"value":11684453.45,"debt":25332.25,"equity":11659121.2,"netWorth":9884211.1,"cashFlow":45218.63,"afterTaxCashFlow":-139813.17,"tax":185031.8,"federalTax":132488.68,"stateTax":52543.12,"niit":5286.3,"suspendedLosses":350200.0,"releasedLosses":0.0,"events":[]},{"year":2051,"value":12107351.39,"debt":1075.28,"equity":12106276.11,"netWorth":10213401.22,"cashFlow":66834.21,"afterTaxCashFlow":-117964.79,"tax":184799.0,"federalTax":132025.57,"stateTax":52773.43,"niit":4902.84,"suspendedLosses":350200.0,"releasedLosses":0.0,"events":[]},{"year":2052,"value":12545636.32,"debt":0.0,"equity":12545636.32,"netWorth":10542703.21,"cashFlow":73107.89,"afterTaxCashFlow":-110058.22,"tax":183166.11,"federalTax":130507.96,"stateTax":52658.15,"niit":4366.74,"suspendedLosses":350200.0,"releasedLosses":0.0,"events":[]},{"year":2053,"value":12999871.38,"debt":0.0,"equity":12999871.38,"netWorth":10871695.83,"cashFlow":55467.53,"afterTaxCashFlow":-125242.44,"tax":180709.97,"federalTax":128365.04,"stateTax":52344.93,"niit":3736.13,"suspendedLosses":350200.0,"releasedLosses":0.0,"events":[]},{"year":2054,"value":13470640.47,"debt":0.0,"equity":13470640.47,"netWorth":11200538.05,"cashFlow":35574.05,"afterTaxCashFlow":-141926.87,"tax":177500.92,"federalTax":125651.38,"stateTax":51849.54,"niit":3020.88,"suspendedLosses":350200.0,"releasedLosses":0.0,"events":[]},{"year":2055,"value":13958548.96,"debt":0.0,"equity":13958548.96,"netWorth":11528164.62,"cashFlow":13206.77,"afterTaxCashFlow":-160281.92,"tax":173488.69,"federalTax":122327.01,"stateTax":51161.68,"niit":2212.65,"suspendedLosses":350200.0,"releasedLosses":0.0,"events":[]}]},{"name":"Sell Pasadena 2027","description":"Sell the duplex outright. Releases its suspended passive losses in full, but realises 17 years of depreciation recapture at once.","terminalNetWorth":{"cents":789156174,"dollars":7891561.74,"text":"$7,891,561.74"},"cumulativeTax":{"cents":410642277,"dollars":4106422.77,"text":"$4,106,422.77"},"npv":{"cents":100941353,"dollars":1009413.53,"text":"$1,009,413.53"},"ledgerHash":"b6a0d1a0ea3f5ff9070eb545e72f6d7f","years":[{"year":2026,"value":4987000.0,"debt":1336643.26,"equity":3650356.74,"netWorth":3636846.78,"cashFlow":76242.82,"afterTaxCashFlow":-13509.96,"tax":89752.78,"federalTax":66234.16,"stateTax":23518.62,"niit":1963.72,"suspendedLosses":350200.0,"releasedLosses":0.0,"events":["austin: rate resets 3.250% -> 5.250% on 2026-04-01","austin: PAYMENT SHOCK on 2026-04-01 - $1,997.60/mo becomes $2,456.43/mo (+23%)"]},{"year":2027,"value":5166739.0,"debt":1308295.09,"equity":3858443.91,"netWorth":4486336.69,"cashFlow":54120.85,"afterTaxCashFlow":641402.74,"tax":356236.11,"federalTax":251464.72,"stateTax":104771.39,"niit":34462.02,"suspendedLosses":166200.0,"releasedLosses":184000.0,"events":["austin: rate resets 5.250% -> 7.250% on 2027-04-01","austin: PAYMENT SHOCK on 2027-04-01 - $2,456.43/mo becomes $2,947.39/mo (+20%)","pasadena: PAYMENT SHOCK on 2027-07-01 - $1,551.25/mo becomes $2,712.25/mo (+75%)","pasadena: SOLD for $1,469,700.00. Gain $991,278.00 ($290,560.00 unrecaptured 1250, $0.00 ordinary 1245). Releases suspended passive losses of $184,000.00."]},{"year":2028,"value":3831847.52,"debt":853928.72,"equity":2977918.8,"netWorth":3560497.03,"cashFlow":41677.86,"afterTaxCashFlow":-45314.55,"tax":86992.41,"federalTax":63844.21,"stateTax":23148.2,"niit":1278.7,"suspendedLosses":166200.0,"releasedLosses":0.0,"events":["austin: rate resets 7.250% -> 7.500% on 2028-04-01"]},{"year":2029,"value":3971601.64,"debt":831156.97,"equity":3140444.67,"netWorth":3676128.77,"cashFlow":43093.88,"afterTaxCashFlow":-46894.13,"tax":89988.01,"federalTax":65921.92,"stateTax":24066.09,"niit":1376.65,"suspendedLosses":166200.0,"releasedLosses":0.0,"events":[]},{"year":2030,"value":4116484.01,"debt":807688.91,"equity":3308795.1,"netWorth":3795912.58,"cashFlow":44535.15,"afterTaxCashFlow":-48566.62,"tax":93101.77,"federalTax":68084.22,"stateTax":25017.55,"niit":1480.57,"suspendedLosses":166200.0,"releasedLosses":0.0,"events":[]},{"year":2031,"value":4266684.06,"debt":783463.56,"equity":3483220.5,"netWorth":3919917.75,"cashFlow":45795.06,"afterTaxCashFlow":-50420.23,"tax":96215.29,"federalTax":70241.32,"stateTax":25973.97,"niit":1580.49,"suspendedLosses":166200.0,"releasedLosses":0.0,"events":[]},{"year":2032,"value":4422398.31,"debt":760345.38,"equity":3662052.93,"netWorth":4048311.19,"cashFlow":48889.83,"afterTaxCashFlow":-50438.99,"tax":99328.82,"federalTax":72394.64,"stateTax":26934.18,"niit":1673.84,"suspendedLosses":166200.0,"releasedLosses":0.0,"events":[]},{"year":2033,"value":4583830.51,"debt":736132.05,"equity":3847698.46,"netWorth":4180764.4,"cashFlow":49226.47,"afterTaxCashFlow":-53192.32,"tax":102418.79,"federalTax":74526.18,"stateTax":27892.61,"niit":1760.02,"suspendedLosses":166200.0,"releasedLosses":0.0,"events":[]},{"year":2034,"value":4751192.07,"debt":710547.27,"equity":4040644.8,"netWorth":4317510.76,"cashFlow":49319.91,"afterTaxCashFlow":-56199.98,"tax":105519.89,"federalTax":76661.16,"stateTax":28858.73,"niit":1840.81,"suspendedLosses":166200.0,"releasedLosses":0.0,"events":[]},{"year":2035,"value":4924702.23,"debt":683500.13,"equity":4241202.1,"netWorth":4458587.38,"cashFlow":49140.92,"afterTaxCashFlow":-59480.68,"tax":108621.6,"federalTax":78790.65,"stateTax":29830.95,"niit":1915.34,"suspendedLosses":166200.0,"releasedLosses":0.0,"events":[]},{"year":2036,"value":5104588.43,"debt":654893.13,"equity":4449695.3,"netWorth":4604032.08,"cashFlow":48657.39,"afterTaxCashFlow":-63048.5,"tax":111705.89,"federalTax":80903.06,"stateTax":30802.83,"niit":1982.67,"suspendedLosses":166200.0,"releasedLosses":0.0,"events":[]},{"year":2037,"value":5291086.55,"debt":624621.48,"equity":4666465.07,"netWorth":4753871.49,"cashFlow":47834.19,"afterTaxCashFlow":-66930.36,"tax":114764.55,"federalTax":82992.18,"stateTax":31772.37,"niit":2041.74,"suspendedLosses":166200.0,"releasedLosses":0.0,"events":[]},{"year":2038,"value":5484441.29,"debt":592572.87,"equity":4891868.42,"netWorth":4908105.69,"cashFlow":46632.79,"afterTaxCashFlow":-71169.15,"tax":117801.94,"federalTax":85059.99,"stateTax":32741.95,"niit":2091.4,"suspendedLosses":166200.0,"releasedLosses":0.0,"events":[]},{"year":2039,"value":5684906.44,"debt":558626.48,"equity":5126279.96,"netWorth":5066740.07,"cashFlow":45011.01,"afterTaxCashFlow":-75777.16,"tax":120788.17,"federalTax":87083.76,"stateTax":33704.41,"niit":2130.4,"suspendedLosses":166200.0,"releasedLosses":0.0,"events":[]},{"year":2040,"value":5892745.28,"debt":522652.72,"equity":5370092.56,"netWorth":5229746.03,"cashFlow":42922.64,"afterTaxCashFlow":-80806.64,"tax":123729.28,"federalTax":89067.72,"stateTax":34661.56,"niit":2157.32,"suspendedLosses":166200.0,"releasedLosses":0.0,"events":[]},{"year":2041,"value":6108230.89,"debt":484512.27,"equity":5623718.62,"netWorth":5397087.33,"cashFlow":40317.07,"afterTaxCashFlow":-86284.76,"tax":126601.83,"federalTax":90996.24,"stateTax":35605.59,"niit":2170.63,"suspendedLosses":166200.0,"releasedLosses":0.0,"events":[]},{"year":2042,"value":6331646.58,"debt":444055.43,"equity":5887591.15,"netWorth":5568697.65,"cashFlow":37139.03,"afterTaxCashFlow":-92262.21,"tax":129401.24,"federalTax":92863.59,"stateTax":36537.65,"niit":2168.65,"suspendedLosses":166200.0,"releasedLosses":0.0,"events":[]},{"year":2043,"value":6563286.15,"debt":401121.33,"equity":6162164.82,"netWorth":5744504.24,"cashFlow":33327.92,"afterTaxCashFlow":-98767.08,"tax":132095.0,"federalTax":94645.81,"stateTax":37449.19,"niit":2149.52,"suspendedLosses":166200.0,"releasedLosses":0.0,"events":[]},{"year":2044,"value":6803454.47,"debt":355537.07,"equity":6447917.4,"netWorth":5924386.12,"cashFlow":28817.52,"afterTaxCashFlow":-105870.7,"tax":134688.22,"federalTax":96347.7,"stateTax":38340.52,"niit":2111.2,"suspendedLosses":166200.0,"releasedLosses":0.0,"events":[]},{"year":2045,"value":7052467.7,"debt":307116.67,"equity":6745351.03,"netWorth":6105152.06,"cashFlow":23535.41,"afterTaxCashFlow":-116667.69,"tax":140203.1,"federalTax":100232.25,"stateTax":39970.85,"niit":2367.44,"suspendedLosses":166200.0,"releasedLosses":0.0,"events":["long_beach: depreciation schedule exhausted - the shelter ends and taxable rental income steps up with no change to the property"]},{"year":2046,"value":7310653.88,"debt":255660.15,"equity":7054993.73,"netWorth":6282197.97,"cashFlow":17402.43,"afterTaxCashFlow":-132596.79,"tax":149999.22,"federalTax":107318.98,"stateTax":42680.24,"niit":3051.2,"suspendedLosses":166200.0,"releasedLosses":0.0,"events":[]},{"year":2047,"value":7578353.28,"debt":200952.45,"equity":7377400.83,"netWorth":6459571.91,"cashFlow":10332.0,"afterTaxCashFlow":-145033.16,"tax":155365.16,"federalTax":111079.3,"stateTax":44285.86,"niit":3275.98,"suspendedLosses":166200.0,"releasedLosses":0.0,"events":["silver_lake: depreciation schedule exhausted - the shelter ends and taxable rental income steps up with no change to the property"]},{"year":2048,"value":7855918.85,"debt":142762.2,"equity":7713156.65,"netWorth":6638372.17,"cashFlow":2229.54,"afterTaxCashFlow":-156955.56,"tax":159185.1,"federalTax":113674.13,"stateTax":45510.97,"niit":3333.23,"suspendedLosses":166200.0,"releasedLosses":0.0,"events":["austin: depreciation schedule exhausted - the shelter ends and taxable rental income steps up with no change to the property"]},{"year":2049,"value":8143716.8,"debt":80840.49,"equity":8062876.31,"netWorth":6816185.51,"cashFlow":-7008.31,"afterTaxCashFlow":-171906.32,"tax":164898.01,"federalTax":117682.05,"stateTax":47215.96,"niit":3574.19,"suspendedLosses":166200.0,"releasedLosses":0.0,"events":[]},{"year":2050,"value":8442127.0,"debt":25332.25,"equity":8416794.75,"netWorth":6998433.66,"cashFlow":-5428.6,"afterTaxCashFlow":-171670.29,"tax":166241.69,"federalTax":118408.76,"stateTax":47832.93,"niit":3361.71,"suspendedLosses":166200.0,"releasedLosses":0.0,"events":[]},{"year":2051,"value":8751543.51,"debt":1075.28,"equity":8750468.23,"netWorth":7183694.01,"cashFlow":18426.67,"afterTaxCashFlow":-148413.13,"tax":166839.8,"federalTax":118568.27,"stateTax":48271.53,"niit":3063.35,"suspendedLosses":166200.0,"releasedLosses":0.0,"events":[]},{"year":2052,"value":9072375.17,"debt":0.0,"equity":9072375.17,"netWorth":7366749.69,"cashFlow":27331.99,"afterTaxCashFlow":-138851.26,"tax":166183.25,"federalTax":117782.26,"stateTax":48400.99,"niit":2627.26,"suspendedLosses":166200.0,"releasedLosses":0.0,"events":[]},{"year":2053,"value":9405046.09,"debt":0.0,"equity":9405046.09,"netWorth":7547312.46,"cashFlow":12755.76,"afterTaxCashFlow":-152108.15,"tax":164863.91,"federalTax":116491.17,"stateTax":48372.74,"niit":2113.08,"suspendedLosses":166200.0,"releasedLosses":0.0,"events":[]},{"year":2054,"value":9749996.29,"debt":0.0,"equity":9749996.29,"netWorth":7724362.86,"cashFlow":-3596.85,"afterTaxCashFlow":-167899.8,"tax":164302.95,"federalTax":115761.79,"stateTax":48541.16,"niit":1669.07,"suspendedLosses":169796.85,"releasedLosses":0.0,"events":[]},{"year":2055,"value":10107682.23,"debt":0.0,"equity":10107682.23,"netWorth":7891561.74,"cashFlow":-21898.07,"afterTaxCashFlow":-190487.06,"tax":168588.99,"federalTax":118655.54,"stateTax":49933.45,"niit":1710.8,"suspendedLosses":191694.92,"releasedLosses":0.0,"events":[]}]},{"name":"Exchange Pasadena 2027 into Texas","description":"Defer the gain into a larger Texas replacement. Triggers the California clawback and does NOT release the suspended losses.","terminalNetWorth":{"cents":1387563634,"dollars":13875636.34,"text":"$13,875,636.34"},"cumulativeTax":{"cents":393380424,"dollars":3933804.24,"text":"$3,933,804.24"},"npv":{"cents":213199249,"dollars":2131992.49,"text":"$2,131,992.49"},"ledgerHash":"4857faaa0380abf8b6a24a8def88f897","years":[{"year":2026,"value":4987000.0,"debt":1336643.26,"equity":3650356.74,"netWorth":3636846.78,"cashFlow":76242.82,"afterTaxCashFlow":-13509.96,"tax":89752.78,"federalTax":66234.16,"stateTax":23518.62,"niit":1963.72,"suspendedLosses":350200.0,"releasedLosses":0.0,"events":["austin: rate resets 3.250% -> 5.250% on 2026-04-01","austin: PAYMENT SHOCK on 2026-04-01 - $1,997.60/mo becomes $2,456.43/mo (+23%)"]},{"year":2027,"value":5166739.0,"debt":1308295.09,"equity":3858443.91,"netWorth":3814705.01,"cashFlow":54120.85,"afterTaxCashFlow":-30228.94,"tax":84349.79,"federalTax":62027.11,"stateTax":22322.68,"niit":1210.96,"suspendedLosses":350200.0,"releasedLosses":0.0,"events":["austin: rate resets 5.250% -> 7.250% on 2027-04-01","austin: PAYMENT SHOCK on 2027-04-01 - $2,456.43/mo becomes $2,947.39/mo (+20%)","pasadena: PAYMENT SHOCK on 2027-07-01 - $1,551.25/mo becomes $2,712.25/mo (+75%)","pasadena: EXCHANGED into $1,950,000.00 replacement. $991,278.00 deferred, $0.00 recognised now. Suspended losses of $184,000.00 transfer with the activity (they are NOT released - an exchange is not a taxable disposition).","pasadena: California clawback applies: FTB 3840 must be filed every year until the deferred gain of $991,278.00 is recognised, and California will tax it regardless of where the client lives then."]},{"year":2028,"value":5920736.27,"debt":853928.72,"equity":5066807.55,"netWorth":5032122.11,"cashFlow":93352.82,"afterTaxCashFlow":9053.46,"tax":84299.36,"federalTax":61826.24,"stateTax":22473.12,"niit":1002.86,"suspendedLosses":350200.0,"releasedLosses":0.0,"events":["austin: rate resets 7.250% -> 7.500% on 2028-04-01"]},{"year":2029,"value":6133601.5,"debt":831156.97,"equity":5302444.53,"netWorth":5275771.08,"cashFlow":95624.35,"afterTaxCashFlow":8011.99,"tax":87612.36,"federalTax":64141.78,"stateTax":23470.58,"niit":1133.32,"suspendedLosses":350200.0,"releasedLosses":0.0,"events":[]},{"year":2030,"value":6354153.86,"debt":807688.91,"equity":5546464.95,"netWorth":5526650.08,"cashFlow":97890.87,"afterTaxCashFlow":6858.58,"tax":91032.29,"federalTax":66533.5,"stateTax":24498.79,"niit":1268.6,"suspendedLosses":350200.0,"releasedLosses":0.0,"events":[]},{"year":2031,"value":6582672.36,"debt":783463.56,"equity":5799208.8,"netWorth":5784895.32,"cashFlow":99940.02,"afterTaxCashFlow":5501.39,"tax":94438.63,"federalTax":68910.02,"stateTax":25528.61,"niit":1398.52,"suspendedLosses":350200.0,"releasedLosses":0.0,"events":[]},{"year":2032,"value":6819446.2,"debt":760345.38,"equity":6059100.82,"netWorth":6050739.82,"cashFlow":103781.75,"afterTaxCashFlow":5952.48,"tax":97829.27,"federalTax":71270.98,"stateTax":26558.29,"niit":1520.24,"suspendedLosses":350200.0,"releasedLosses":0.0,"events":[]},{"year":2033,"value":7064775.07,"debt":736132.05,"equity":6328643.02,"netWorth":6323920.03,"cashFlow":104816.1,"afterTaxCashFlow":3638.01,"tax":101178.09,"federalTax":73596.49,"stateTax":27581.6,"niit":1632.94,"suspendedLosses":350200.0,"releasedLosses":0.0,"events":[]},{"year":2034,"value":7318969.69,"debt":710547.27,"equity":6608422.42,"netWorth":6604732.82,"cashFlow":105550.31,"afterTaxCashFlow":1033.39,"tax":104516.92,"federalTax":75909.61,"stateTax":28607.31,"niit":1738.08,"suspendedLosses":350200.0,"releasedLosses":0.0,"events":[]},{"year":2035,"value":7582352.07,"debt":683500.13,"equity":6898851.94,"netWorth":6893276.97,"cashFlow":105946.73,"afterTaxCashFlow":-1885.37,"tax":107832.1,"federalTax":78199.06,"stateTax":29633.04,"niit":1834.48,"suspendedLosses":350200.0,"releasedLosses":0.0,"events":[]},{"year":2036,"value":7855256.01,"debt":654893.13,"equity":7200362.88,"netWorth":7189295.87,"cashFlow":105963.9,"afterTaxCashFlow":-5492.04,"tax":111455.94,"federalTax":80715.77,"stateTax":30740.17,"niit":1957.07,"suspendedLosses":350200.0,"releasedLosses":0.0,"events":[]},{"year":2037,"value":8138027.5,"debt":624621.48,"equity":7513406.02,"netWorth":7485089.23,"cashFlow":105556.52,"afterTaxCashFlow":-17249.78,"tax":122806.3,"federalTax":89018.07,"stateTax":33788.23,"niit":2865.42,"suspendedLosses":350200.0,"releasedLosses":0.0,"events":[]},{"year":2038,"value":8431025.17,"debt":592572.87,"equity":7838452.3,"netWorth":7788848.0,"cashFlow":104674.77,"afterTaxCashFlow":-21287.51,"tax":125962.28,"federalTax":91174.74,"stateTax":34787.54,"niit":2927.23,"suspendedLosses":350200.0,"releasedLosses":0.0,"events":[]},{"year":2039,"value":8734620.76,"debt":558626.48,"equity":8175994.28,"netWorth":8100627.27,"cashFlow":103264.12,"afterTaxCashFlow":-25762.71,"tax":129026.83,"federalTax":93257.2,"stateTax":35769.63,"niit":2974.25,"suspendedLosses":350200.0,"releasedLosses":0.0,"events":[]},{"year":2040,"value":9049199.6,"debt":522652.72,"equity":8526546.88,"netWorth":8420443.69,"cashFlow":101264.8,"afterTaxCashFlow":-30736.18,"tax":132000.98,"federalTax":95265.92,"stateTax":36735.06,"niit":3004.55,"suspendedLosses":350200.0,"releasedLosses":0.0,"events":[]},{"year":2041,"value":9375161.11,"debt":484512.27,"equity":8890648.84,"netWorth":8748301.2,"cashFlow":98611.3,"afterTaxCashFlow":-36244.45,"tax":134855.75,"federalTax":97181.12,"stateTax":37674.63,"niit":3016.04,"suspendedLosses":350200.0,"releasedLosses":0.0,"events":[]},{"year":2042,"value":9712919.36,"debt":444055.43,"equity":9268863.93,"netWorth":9084167.8,"cashFlow":95232.0,"afterTaxCashFlow":-42348.49,"tax":137580.49,"federalTax":98992.51,"stateTax":38587.98,"niit":3006.41,"suspendedLosses":350200.0,"releasedLosses":0.0,"events":[]},{"year":2043,"value":10062903.47,"debt":401121.33,"equity":9661782.14,"netWorth":9427998.35,"cashFlow":91048.38,"afterTaxCashFlow":-49087.66,"tax":140136.04,"federalTax":100671.17,"stateTax":39464.87,"niit":2973.13,"suspendedLosses":350200.0,"releasedLosses":0.0,"events":[]},{"year":2044,"value":10425558.4,"debt":355537.07,"equity":10070021.33,"netWorth":9779691.88,"cashFlow":85974.58,"afterTaxCashFlow":-56545.66,"tax":142520.24,"federalTax":102216.44,"stateTax":40303.8,"niit":2913.4,"suspendedLosses":350200.0,"releasedLosses":0.0,"events":[]},{"year":2045,"value":10801345.27,"debt":307116.67,"equity":10494228.6,"netWorth":10136068.5,"cashFlow":79916.66,"afterTaxCashFlow":-67830.65,"tax":147747.31,"federalTax":105885.32,"stateTax":41861.99,"niit":3140.16,"suspendedLosses":350200.0,"releasedLosses":0.0,"events":["long_beach: depreciation schedule exhausted - the shelter ends and taxable rental income steps up with no change to the property"]},{"year":2046,"value":11190742.16,"debt":255660.15,"equity":10935082.01,"netWorth":10492525.73,"cashFlow":72771.86,"afterTaxCashFlow":-84396.18,"tax":157168.04,"federalTax":112690.76,"stateTax":44477.28,"niit":3785.47,"suspendedLosses":350200.0,"releasedLosses":0.0,"events":[]},{"year":2047,"value":11594244.65,"debt":200952.45,"equity":11393292.2,"netWorth":10853102.24,"cashFlow":64427.78,"afterTaxCashFlow":-97633.68,"tax":162061.46,"federalTax":116097.01,"stateTax":45964.45,"niit":3961.86,"suspendedLosses":350200.0,"releasedLosses":0.0,"events":["silver_lake: depreciation schedule exhausted - the shelter ends and taxable rental income steps up with no change to the property"]},{"year":2048,"value":12012366.42,"debt":142762.2,"equity":11869604.22,"netWorth":11218874.6,"cashFlow":54761.58,"afterTaxCashFlow":-110539.66,"tax":165301.24,"federalTax":118257.11,"stateTax":47044.13,"niit":3959.68,"suspendedLosses":350200.0,"releasedLosses":0.0,"events":["austin: depreciation schedule exhausted - the shelter ends and taxable rental income steps up with no change to the property"]},{"year":2049,"value":12445640.04,"debt":80840.49,"equity":12364799.55,"netWorth":11587393.95,"cashFlow":43638.92,"afterTaxCashFlow":-126675.98,"tax":170314.9,"federalTax":121741.07,"stateTax":48573.83,"niit":4129.02,"suspendedLosses":350200.0,"releasedLosses":0.0,"events":[]},{"year":2050,"value":12894617.55,"debt":25332.25,"equity":12869285.3,"netWorth":11964031.0,"cashFlow":42978.94,"afterTaxCashFlow":-127848.7,"tax":170827.64,"federalTax":121845.13,"stateTax":48982.51,"niit":3831.43,"suspendedLosses":350200.0,"releasedLosses":0.0,"events":[]},{"year":2051,"value":13359871.23,"debt":1075.28,"equity":13358795.95,"netWorth":12347294.8,"cashFlow":64202.57,"afterTaxCashFlow":-106246.85,"tax":170449.42,"federalTax":121273.05,"stateTax":49176.37,"niit":3433.07,"suspendedLosses":350200.0,"releasedLosses":0.0,"events":[]},{"year":2052,"value":13841994.36,"debt":0.0,"equity":13841994.36,"netWorth":12731880.9,"cashFlow":70043.76,"afterTaxCashFlow":-98612.31,"tax":168656.07,"federalTax":119635.21,"stateTax":49020.86,"niit":2880.54,"suspendedLosses":350200.0,"releasedLosses":0.0,"events":[]},{"year":2053,"value":14341601.95,"debt":0.0,"equity":14341601.95,"netWorth":13117392.08,"cashFlow":51926.66,"afterTaxCashFlow":-114096.41,"tax":166023.07,"federalTax":117359.76,"stateTax":48663.31,"niit":2231.81,"suspendedLosses":350200.0,"releasedLosses":0.0,"events":[]},{"year":2054,"value":14859331.61,"debt":0.0,"equity":14859331.61,"netWorth":13502326.78,"cashFlow":31507.99,"afterTaxCashFlow":-132794.96,"tax":164302.95,"federalTax":115761.79,"stateTax":48541.16,"niit":1669.07,"suspendedLosses":353236.55,"releasedLosses":0.0,"events":["pasadena->replacement2027: depreciation schedule exhausted - the shelter ends and taxable rental income steps up with no change to the property"]},{"year":2055,"value":15395844.28,"debt":0.0,"equity":15395844.28,"netWorth":13875636.34,"cashFlow":8562.59,"afterTaxCashFlow":-163203.11,"tax":171765.7,"federalTax":121035.93,"stateTax":50729.77,"niit":2036.17,"suspendedLosses":353236.55,"releasedLosses":0.0,"events":[]}]},{"name":"Sell Pasadena 2027, Long Beach 2028","description":"Stagger two sales across tax years to keep the second out of the top capital gains bracket.","terminalNetWorth":{"cents":402327810,"dollars":4023278.1,"text":"$4,023,278.10"},"cumulativeTax":{"cents":421011733,"dollars":4210117.33,"text":"$4,210,117.33"},"npv":{"cents":101387629,"dollars":1013876.29,"text":"$1,013,876.29"},"ledgerHash":"476c9cf0ea75f6b5c4a11c8692e7d344","years":[{"year":2026,"value":4987000.0,"debt":1336643.26,"equity":3650356.74,"netWorth":3636846.78,"cashFlow":76242.82,"afterTaxCashFlow":-13509.96,"tax":89752.78,"federalTax":66234.16,"stateTax":23518.62,"niit":1963.72,"suspendedLosses":350200.0,"releasedLosses":0.0,"events":["austin: rate resets 3.250% -> 5.250% on 2026-04-01","austin: PAYMENT SHOCK on 2026-04-01 - $1,997.60/mo becomes $2,456.43/mo (+23%)"]},{"year":2027,"value":5166739.0,"debt":1308295.09,"equity":3858443.91,"netWorth":4486336.69,"cashFlow":54120.85,"afterTaxCashFlow":641402.74,"tax":356236.11,"federalTax":251464.72,"stateTax":104771.39,"niit":34462.02,"suspendedLosses":166200.0,"releasedLosses":184000.0,"events":["austin: rate resets 5.250% -> 7.250% on 2027-04-01","austin: PAYMENT SHOCK on 2027-04-01 - $2,456.43/mo becomes $2,947.39/mo (+20%)","pasadena: PAYMENT SHOCK on 2027-07-01 - $1,551.25/mo becomes $2,712.25/mo (+75%)","pasadena: SOLD for $1,469,700.00. Gain $991,278.00 ($290,560.00 unrecaptured 1250, $0.00 ordinary 1245). Releases suspended passive losses of $184,000.00."]},{"year":2028,"value":3831847.52,"debt":853928.72,"equity":2977918.8,"netWorth":4779458.49,"cashFlow":30426.06,"afterTaxCashFlow":1173646.91,"tax":362391.87,"federalTax":260042.58,"stateTax":102349.29,"niit":32446.67,"suspendedLosses":126783.06,"releasedLosses":41500.0,"events":["austin: rate resets 7.250% -> 7.500% on 2028-04-01","long_beach: SOLD for $1,756,809.00. Gain $830,745.92 ($299,345.46 unrecaptured 1250, $0.00 ordinary 1245). Releases suspended passive losses of $41,500.00."]},{"year":2029,"value":2153304.32,"debt":693066.94,"equity":1460237.38,"netWorth":3173575.12,"cashFlow":-2864.78,"afterTaxCashFlow":-88201.95,"tax":85337.17,"federalTax":62436.92,"stateTax":22900.25,"niit":900.28,"suspendedLosses":136965.28,"releasedLosses":0.0,"events":[]},{"year":2030,"value":2234546.29,"debt":674689.15,"equity":1559857.14,"netWorth":3183269.41,"cashFlow":-2269.42,"afterTaxCashFlow":-89925.47,"tax":87656.05,"federalTax":64003.6,"stateTax":23652.45,"niit":922.79,"suspendedLosses":145656.63,"releasedLosses":0.0,"events":[]},{"year":2031,"value":2318878.52,"debt":655366.45,"equity":1663512.07,"netWorth":3195166.06,"cashFlow":-1739.02,"afterTaxCashFlow":-91758.28,"tax":90019.26,"federalTax":65598.47,"stateTax":24420.79,"niit":945.86,"suspendedLosses":152868.03,"releasedLosses":0.0,"events":[]},{"year":2032,"value":2406419.57,"debt":635041.38,"equity":1771378.19,"netWorth":3209297.27,"cashFlow":-1282.62,"afterTaxCashFlow":-93734.91,"tax":92452.29,"federalTax":67241.87,"stateTax":25210.42,"niit":969.5,"suspendedLosses":158615.7,"releasedLosses":0.0,"events":[]},{"year":2033,"value":2497292.52,"debt":613652.5,"equity":1883640.02,"netWorth":3225711.42,"cashFlow":-910.22,"afterTaxCashFlow":-95847.68,"tax":94937.46,"federalTax":68920.22,"stateTax":26017.24,"niit":993.74,"suspendedLosses":162921.85,"releasedLosses":0.0,"events":[]},{"year":2034,"value":2591625.25,"debt":591134.22,"equity":2000491.03,"netWorth":3244437.29,"cashFlow":-632.79,"afterTaxCashFlow":-98125.14,"tax":97492.35,"federalTax":70645.92,"stateTax":26846.43,"niit":1018.58,"suspendedLosses":165815.5,"releasedLosses":0.0,"events":[]},{"year":2035,"value":2689550.57,"debt":567416.35,"equity":2122134.22,"netWorth":3265503.09,"cashFlow":-462.37,"afterTaxCashFlow":-100577.39,"tax":100115.02,"federalTax":72416.45,"stateTax":27698.57,"niit":1044.05,"suspendedLosses":167333.08,"releasedLosses":0.0,"events":[]},{"year":2036,"value":2791206.46,"debt":542423.92,"equity":2248782.54,"netWorth":3288942.37,"cashFlow":-412.18,"afterTaxCashFlow":-103209.04,"tax":102796.86,"federalTax":74227.29,"stateTax":28569.57,"niit":1070.15,"suspendedLosses":167519.43,"releasedLosses":0.0,"events":[]},{"year":2037,"value":2896736.21,"debt":516076.58,"equity":2380659.63,"netWorth":3314378.01,"cashFlow":-496.73,"afterTaxCashFlow":-106441.45,"tax":105944.72,"federalTax":76383.25,"stateTax":29561.47,"niit":1138.36,"suspendedLosses":167519.43,"releasedLosses":0.0,"events":[]},{"year":2038,"value":3006288.69,"debt":488288.56,"equity":2518000.13,"netWorth":3341771.65,"cashFlow":-731.9,"afterTaxCashFlow":-109946.86,"tax":109214.96,"federalTax":78625.54,"stateTax":30589.42,"niit":1211.87,"suspendedLosses":167519.43,"releasedLosses":0.0,"events":[]},{"year":2039,"value":3120018.5,"debt":458967.88,"equity":2661050.62,"netWorth":3371170.12,"cashFlow":-1135.14,"afterTaxCashFlow":-113652.02,"tax":112516.88,"federalTax":80885.86,"stateTax":31631.02,"niit":1283.2,"suspendedLosses":167519.43,"releasedLosses":0.0,"events":[]},{"year":2040,"value":3238086.26,"debt":428016.21,"equity":2810070.05,"netWorth":3402598.33,"cashFlow":-1725.56,"afterTaxCashFlow":-117591.22,"tax":115865.66,"federalTax":83175.31,"stateTax":32690.35,"niit":1351.88,"suspendedLosses":167519.43,"releasedLosses":0.0,"events":[]},{"year":2041,"value":3360658.81,"debt":395328.21,"equity":2965330.6,"netWorth":3436086.9,"cashFlow":-2524.13,"afterTaxCashFlow":-121771.98,"tax":119247.85,"federalTax":85485.71,"stateTax":33762.14,"niit":1417.39,"suspendedLosses":167519.43,"releasedLosses":0.0,"events":[]},{"year":2042,"value":3487909.47,"debt":360791.04,"equity":3127118.43,"netWorth":3471651.2,"cashFlow":-3553.71,"afterTaxCashFlow":-126223.53,"tax":122669.82,"federalTax":87819.56,"stateTax":34850.26,"niit":1479.18,"suspendedLosses":167519.43,"releasedLosses":0.0,"events":[]},{"year":2043,"value":3620018.25,"debt":324283.88,"equity":3295734.37,"netWorth":3509316.72,"cashFlow":-4839.42,"afterTaxCashFlow":-130950.42,"tax":126111.0,"federalTax":90161.84,"stateTax":35949.16,"niit":1536.6,"suspendedLosses":167519.43,"releasedLosses":0.0,"events":[]},{"year":2044,"value":3757172.19,"debt":285677.3,"equity":3471494.89,"netWorth":3549078.86,"cashFlow":-6408.75,"afterTaxCashFlow":-135998.38,"tax":129589.63,"federalTax":92527.19,"stateTax":37062.44,"niit":1588.97,"suspendedLosses":167519.43,"releasedLosses":0.0,"events":[]},{"year":2045,"value":3899565.54,"debt":244832.51,"equity":3654733.03,"netWorth":3590967.96,"cashFlow":-8291.73,"afterTaxCashFlow":-141349.04,"tax":133057.31,"federalTax":94877.72,"stateTax":38179.59,"niit":1635.52,"suspendedLosses":167519.43,"releasedLosses":0.0,"events":[]},{"year":2046,"value":4047400.14,"debt":201600.76,"equity":3845799.38,"netWorth":3634945.89,"cashFlow":-10521.25,"afterTaxCashFlow":-147088.42,"tax":136567.17,"federalTax":97253.99,"stateTax":39313.18,"niit":1675.41,"suspendedLosses":167519.43,"releasedLosses":0.0,"events":[]},{"year":2047,"value":4200885.66,"debt":155822.66,"equity":4045063.0,"netWorth":3677752.35,"cashFlow":-13133.26,"afterTaxCashFlow":-156457.16,"tax":143323.9,"federalTax":102056.47,"stateTax":41267.43,"niit":2042.65,"suspendedLosses":167519.43,"releasedLosses":0.0,"events":["silver_lake: depreciation schedule exhausted - the shelter ends and taxable rental income steps up with no change to the property"]},{"year":2048,"value":4360239.87,"debt":107327.18,"equity":4252912.69,"netWorth":3720696.49,"cashFlow":-16167.07,"afterTaxCashFlow":-164905.55,"tax":148738.48,"federalTax":105846.2,"stateTax":42892.28,"niit":2263.23,"suspendedLosses":167519.43,"releasedLosses":0.0,"events":["austin: depreciation schedule exhausted - the shelter ends and taxable rental income steps up with no change to the property"]},{"year":2049,"value":4525689.05,"debt":55931.0,"equity":4469758.05,"netWorth":3761605.85,"cashFlow":-19665.69,"afterTaxCashFlow":-175936.0,"tax":156270.31,"federalTax":111217.09,"stateTax":45053.22,"niit":2690.49,"suspendedLosses":167519.43,"releasedLosses":0.0,"events":[]},{"year":2050,"value":4697468.28,"debt":11850.25,"equity":4685618.03,"netWorth":3806176.07,"cashFlow":-11610.18,"afterTaxCashFlow":-171289.76,"tax":159679.58,"federalTax":113491.6,"stateTax":46187.98,"niit":2689.58,"suspendedLosses":167519.43,"releasedLosses":0.0,"events":[]},{"year":2051,"value":4875821.74,"debt":0.0,"equity":4875821.74,"netWorth":3853289.43,"cashFlow":19524.03,"afterTaxCashFlow":-143090.35,"tax":162614.38,"federalTax":115402.05,"stateTax":47212.33,"niit":2630.56,"suspendedLosses":167519.43,"releasedLosses":0.0,"events":[]},{"year":2052,"value":5061003.13,"debt":0.0,"equity":5061003.13,"netWorth":3897119.49,"cashFlow":23357.31,"afterTaxCashFlow":-141351.33,"tax":164708.64,"federalTax":116677.3,"stateTax":48031.34,"niit":2476.22,"suspendedLosses":167519.43,"releasedLosses":0.0,"events":[]},{"year":2053,"value":5253276.03,"debt":0.0,"equity":5253276.03,"netWorth":3940258.34,"cashFlow":17484.03,"afterTaxCashFlow":-149134.05,"tax":166618.08,"federalTax":117805.62,"stateTax":48812.46,"niit":2292.75,"suspendedLosses":167519.43,"releasedLosses":0.0,"events":[]},{"year":2054,"value":5452914.28,"debt":0.0,"equity":5452914.28,"netWorth":3982426.65,"cashFlow":10863.28,"afterTaxCashFlow":-157469.94,"tax":168333.22,"federalTax":118781.78,"stateTax":49551.44,"niit":2081.87,"suspendedLosses":167519.43,"releasedLosses":0.0,"events":[]},{"year":2055,"value":5660202.35,"debt":0.0,"equity":5660202.35,"netWorth":4023278.1,"cashFlow":3421.9,"afterTaxCashFlow":-166436.62,"tax":169858.52,"federalTax":119606.83,"stateTax":50251.69,"niit":1840.83,"suspendedLosses":167519.43,"releasedLosses":0.0,"events":[]}]},{"name":"Sell both in 2027","description":"The same two sales, same prices, one tax year.","terminalNetWorth":{"cents":391322511,"dollars":3913225.11,"text":"$3,913,225.11"},"cumulativeTax":{"cents":421404132,"dollars":4214041.32,"text":"$4,214,041.32"},"npv":{"cents":95702861,"dollars":957028.61,"text":"$957,028.61"},"ledgerHash":"fe74e896f439bbd09faafd1d1a79d803","years":[{"year":2026,"value":4987000.0,"debt":1336643.26,"equity":3650356.74,"netWorth":3636846.78,"cashFlow":76242.82,"afterTaxCashFlow":-13509.96,"tax":89752.78,"federalTax":66234.16,"stateTax":23518.62,"niit":1963.72,"suspendedLosses":350200.0,"releasedLosses":0.0,"events":["austin: rate resets 3.250% -> 5.250% on 2026-04-01","austin: PAYMENT SHOCK on 2026-04-01 - $1,997.60/mo becomes $2,456.43/mo (+23%)"]},{"year":2027,"value":5166739.0,"debt":1308295.09,"equity":3858443.91,"netWorth":5636343.39,"cashFlow":43130.86,"afterTaxCashFlow":1791409.44,"tax":639468.53,"federalTax":445805.76,"stateTax":193662.77,"niit":60893.87,"suspendedLosses":127792.6,"releasedLosses":225500.0,"events":["austin: rate resets 5.250% -> 7.250% on 2027-04-01","austin: PAYMENT SHOCK on 2027-04-01 - $2,456.43/mo becomes $2,947.39/mo (+20%)","pasadena: PAYMENT SHOCK on 2027-07-01 - $1,551.25/mo becomes $2,712.25/mo (+75%)","long_beach: SOLD for $1,697,400.00. Gain $746,392.37 ($270,836.37 unrecaptured 1250, $0.00 ordinary 1245). Releases suspended passive losses of $41,500.00.","pasadena: SOLD for $1,469,700.00. Gain $991,278.00 ($290,560.00 unrecaptured 1250, $0.00 ordinary 1245). Releases suspended passive losses of $184,000.00."]},{"year":2028,"value":2075038.52,"debt":710553.58,"equity":1364484.94,"netWorth":3055971.64,"cashFlow":-3329.34,"afterTaxCashFlow":-86412.78,"tax":83083.44,"federalTax":60915.12,"stateTax":22168.32,"niit":878.32,"suspendedLosses":139224.66,"releasedLosses":0.0,"events":["austin: rate resets 7.250% -> 7.500% on 2028-04-01"]},{"year":2029,"value":2153304.32,"debt":693066.94,"equity":1460237.38,"netWorth":3063522.13,"cashFlow":-2864.78,"afterTaxCashFlow":-88201.95,"tax":85337.17,"federalTax":62436.92,"stateTax":22900.25,"niit":900.28,"suspendedLosses":149406.88,"releasedLosses":0.0,"events":[]},{"year":2030,"value":2234546.29,"debt":674689.15,"equity":1559857.14,"netWorth":3073216.42,"cashFlow":-2269.42,"afterTaxCashFlow":-89925.47,"tax":87656.05,"federalTax":64003.6,"stateTax":23652.45,"niit":922.79,"suspendedLosses":158098.23,"releasedLosses":0.0,"events":[]},{"year":2031,"value":2318878.52,"debt":655366.45,"equity":1663512.07,"netWorth":3085113.07,"cashFlow":-1739.02,"afterTaxCashFlow":-91758.28,"tax":90019.26,"federalTax":65598.47,"stateTax":24420.79,"niit":945.86,"suspendedLosses":165309.63,"releasedLosses":0.0,"events":[]},{"year":2032,"value":2406419.57,"debt":635041.38,"equity":1771378.19,"netWorth":3099244.28,"cashFlow":-1282.62,"afterTaxCashFlow":-93734.91,"tax":92452.29,"federalTax":67241.87,"stateTax":25210.42,"niit":969.5,"suspendedLosses":171057.3,"releasedLosses":0.0,"events":[]},{"year":2033,"value":2497292.52,"debt":613652.5,"equity":1883640.02,"netWorth":3115658.43,"cashFlow":-910.22,"afterTaxCashFlow":-95847.68,"tax":94937.46,"federalTax":68920.22,"stateTax":26017.24,"niit":993.74,"suspendedLosses":175363.45,"releasedLosses":0.0,"events":[]},{"year":2034,"value":2591625.25,"debt":591134.22,"equity":2000491.03,"netWorth":3134384.3,"cashFlow":-632.79,"afterTaxCashFlow":-98125.14,"tax":97492.35,"federalTax":70645.92,"stateTax":26846.43,"niit":1018.58,"suspendedLosses":178257.1,"releasedLosses":0.0,"events":[]},{"year":2035,"value":2689550.57,"debt":567416.35,"equity":2122134.22,"netWorth":3155450.1,"cashFlow":-462.37,"afterTaxCashFlow":-100577.39,"tax":100115.02,"federalTax":72416.45,"stateTax":27698.57,"niit":1044.05,"suspendedLosses":179774.68,"releasedLosses":0.0,"events":[]},{"year":2036,"value":2791206.46,"debt":542423.92,"equity":2248782.54,"netWorth":3178889.38,"cashFlow":-412.18,"afterTaxCashFlow":-103209.04,"tax":102796.86,"federalTax":74227.29,"stateTax":28569.57,"niit":1070.15,"suspendedLosses":179961.03,"releasedLosses":0.0,"events":[]},{"year":2037,"value":2896736.21,"debt":516076.58,"equity":2380659.63,"netWorth":3204325.02,"cashFlow":-496.73,"afterTaxCashFlow":-106441.45,"tax":105944.72,"federalTax":76383.25,"stateTax":29561.47,"niit":1138.36,"suspendedLosses":179961.03,"releasedLosses":0.0,"events":[]},{"year":2038,"value":3006288.69,"debt":488288.56,"equity":2518000.13,"netWorth":3231718.66,"cashFlow":-731.9,"afterTaxCashFlow":-109946.86,"tax":109214.96,"federalTax":78625.54,"stateTax":30589.42,"niit":1211.87,"suspendedLosses":179961.03,"releasedLosses":0.0,"events":[]},{"year":2039,"value":3120018.5,"debt":458967.88,"equity":2661050.62,"netWorth":3261117.13,"cashFlow":-1135.14,"afterTaxCashFlow":-113652.02,"tax":112516.88,"federalTax":80885.86,"stateTax":31631.02,"niit":1283.2,"suspendedLosses":179961.03,"releasedLosses":0.0,"events":[]},{"year":2040,"value":3238086.26,"debt":428016.21,"equity":2810070.05,"netWorth":3292545.34,"cashFlow":-1725.56,"afterTaxCashFlow":-117591.22,"tax":115865.66,"federalTax":83175.31,"stateTax":32690.35,"niit":1351.88,"suspendedLosses":179961.03,"releasedLosses":0.0,"events":[]},{"year":2041,"value":3360658.81,"debt":395328.21,"equity":2965330.6,"netWorth":3326033.91,"cashFlow":-2524.13,"afterTaxCashFlow":-121771.98,"tax":119247.85,"federalTax":85485.71,"stateTax":33762.14,"niit":1417.39,"suspendedLosses":179961.03,"releasedLosses":0.0,"events":[]},{"year":2042,"value":3487909.47,"debt":360791.04,"equity":3127118.43,"netWorth":3361598.21,"cashFlow":-3553.71,"afterTaxCashFlow":-126223.53,"tax":122669.82,"federalTax":87819.56,"stateTax":34850.26,"niit":1479.18,"suspendedLosses":179961.03,"releasedLosses":0.0,"events":[]},{"year":2043,"value":3620018.25,"debt":324283.88,"equity":3295734.37,"netWorth":3399263.73,"cashFlow":-4839.42,"afterTaxCashFlow":-130950.42,"tax":126111.0,"federalTax":90161.84,"stateTax":35949.16,"niit":1536.6,"suspendedLosses":179961.03,"releasedLosses":0.0,"events":[]},{"year":2044,"value":3757172.19,"debt":285677.3,"equity":3471494.89,"netWorth":3439025.87,"cashFlow":-6408.75,"afterTaxCashFlow":-135998.38,"tax":129589.63,"federalTax":92527.19,"stateTax":37062.44,"niit":1588.97,"suspendedLosses":179961.03,"releasedLosses":0.0,"events":[]},{"year":2045,"value":3899565.54,"debt":244832.51,"equity":3654733.03,"netWorth":3480914.97,"cashFlow":-8291.73,"afterTaxCashFlow":-141349.04,"tax":133057.31,"federalTax":94877.72,"stateTax":38179.59,"niit":1635.52,"suspendedLosses":179961.03,"releasedLosses":0.0,"events":[]},{"year":2046,"value":4047400.14,"debt":201600.76,"equity":3845799.38,"netWorth":3524892.9,"cashFlow":-10521.25,"afterTaxCashFlow":-147088.42,"tax":136567.17,"federalTax":97253.99,"stateTax":39313.18,"niit":1675.41,"suspendedLosses":179961.03,"releasedLosses":0.0,"events":[]},{"year":2047,"value":4200885.66,"debt":155822.66,"equity":4045063.0,"netWorth":3567699.36,"cashFlow":-13133.26,"afterTaxCashFlow":-156457.16,"tax":143323.9,"federalTax":102056.47,"stateTax":41267.43,"niit":2042.65,"suspendedLosses":179961.03,"releasedLosses":0.0,"events":["silver_lake: depreciation schedule exhausted - the shelter ends and taxable rental income steps up with no change to the property"]},{"year":2048,"value":4360239.87,"debt":107327.18,"equity":4252912.69,"netWorth":3610643.5,"cashFlow":-16167.07,"afterTaxCashFlow":-164905.55,"tax":148738.48,"federalTax":105846.2,"stateTax":42892.28,"niit":2263.23,"suspendedLosses":179961.03,"releasedLosses":0.0,"events":["austin: depreciation schedule exhausted - the shelter ends and taxable rental income steps up with no change to the property"]},{"year":2049,"value":4525689.05,"debt":55931.0,"equity":4469758.05,"netWorth":3651552.86,"cashFlow":-19665.69,"afterTaxCashFlow":-175936.0,"tax":156270.31,"federalTax":111217.09,"stateTax":45053.22,"niit":2690.49,"suspendedLosses":179961.03,"releasedLosses":0.0,"events":[]},{"year":2050,"value":4697468.28,"debt":11850.25,"equity":4685618.03,"netWorth":3696123.08,"cashFlow":-11610.18,"afterTaxCashFlow":-171289.76,"tax":159679.58,"federalTax":113491.6,"stateTax":46187.98,"niit":2689.58,"suspendedLosses":179961.03,"releasedLosses":0.0,"events":[]},{"year":2051,"value":4875821.74,"debt":0.0,"equity":4875821.74,"netWorth":3743236.44,"cashFlow":19524.03,"afterTaxCashFlow":-143090.35,"tax":162614.38,"federalTax":115402.05,"stateTax":47212.33,"niit":2630.56,"suspendedLosses":179961.03,"releasedLosses":0.0,"events":[]},{"year":2052,"value":5061003.13,"debt":0.0,"equity":5061003.13,"netWorth":3787066.5,"cashFlow":23357.31,"afterTaxCashFlow":-141351.33,"tax":164708.64,"federalTax":116677.3,"stateTax":48031.34,"niit":2476.22,"suspendedLosses":179961.03,"releasedLosses":0.0,"events":[]},{"year":2053,"value":5253276.03,"debt":0.0,"equity":5253276.03,"netWorth":3830205.35,"cashFlow":17484.03,"afterTaxCashFlow":-149134.05,"tax":166618.08,"federalTax":117805.62,"stateTax":48812.46,"niit":2292.75,"suspendedLosses":179961.03,"releasedLosses":0.0,"events":[]},{"year":2054,"value":5452914.28,"debt":0.0,"equity":5452914.28,"netWorth":3872373.66,"cashFlow":10863.28,"afterTaxCashFlow":-157469.94,"tax":168333.22,"federalTax":118781.78,"stateTax":49551.44,"niit":2081.87,"suspendedLosses":179961.03,"releasedLosses":0.0,"events":[]},{"year":2055,"value":5660202.35,"debt":0.0,"equity":5660202.35,"netWorth":3913225.11,"cashFlow":3421.9,"afterTaxCashFlow":-166436.62,"tax":169858.52,"federalTax":119606.83,"stateTax":50251.69,"niit":1840.83,"suspendedLosses":179961.03,"releasedLosses":0.0,"events":[]}]}],"assessment":{"propertyId":"long_beach","salePrice":{"cents":169740000,"dollars":1697400.0,"text":"$1,697,400.00"},"saleDate":"2027-09-15","before":{"canRecommend":false,"standing":"assumed","narrative":"Cannot recommend. 1 input to the exit-tax calculation is not attested, and the range between defensible readings is $17,836.51. Ask the owner, or attest an assumption.","uncertainty":{"cents":1783651,"dollars":17836.51,"text":"$17,836.51"},"questions":[{"field":"long_beach.land_allocation","prompt":"What land/improvement split was used for 1247 Ocean Blvd? The original appraisal or the first year's depreciation schedule would settle it.","whyItMatters":"Land is not depreciable, so this one number sets the depreciable basis, the entire depreciation schedule, the adjusted basis at sale, and how much of the gain is unrecaptured section 1250 taxed at 25% instead of capital gain taxed at 20%.","dollarImpact":{"cents":1783651,"dollars":17836.51,"text":"$17,836.51"},"standing":"assumed","candidates":[{"value":{"cents":22400000,"dollars":224000.0,"text":"$224,000.00"},"source":"2024-form-1040-schedule-e","impliedBy":"$32,581.82/yr of depreciation over 27.5 years implies $896,000.05 of depreciable basis, leaving $224,000.00 as land (20% of basis)"},{"value":{"cents":33600000,"dollars":336000.0,"text":"$336,000.00"},"source":"2022-form-1040-schedule-e","impliedBy":"$28,509.09/yr of depreciation over 27.5 years implies $783,999.98 of depreciable basis, leaving $336,000.00 as land (30% of basis)"}]}],"provenance":{"id":"6b2c29b664d85c5a","name":"long_beach.exit_tax","value":{"cents":0,"dollars":0.0,"text":"$0.00"},"standing":"assumed","standingLabel":"assumed","kind":"derived","describe":"amount realised less adjusted basis, split into unrecaptured section 1250, section 1245 ordinary recapture and capital gain, then taxed in the context of the whole household return","children":[{"id":"2efdd52f280358a2","name":"long_beach.fmv_at_death","value":{"cents":112000000,"dollars":1120000.0,"text":"$1,120,000.00"},"standing":"attested","standingLabel":"attested","kind":"attested","describe":"attested by advisor:dana.reyes, CFP at 2026-09-18T10:30:00: date-of-death appraisal in the estate file, confirmed with client","children":[],"by":"advisor:dana.reyes, CFP","note":"date-of-death appraisal in the estate file, confirmed with client","at":"2026-09-18T10:30:00"},{"id":"0b04af32fdffff62","name":"long_beach.land_allocation","value":{"cents":33600000,"dollars":336000.0,"text":"$336,000.00"},"standing":"assumed","standingLabel":"assumed","kind":"assumed","describe":"assumed (30% of value - Los Angeles County assessor median land ratio for zip 90802. No appraisal allocation is in any document provided.)","children":[],"basis":"30% of value - Los Angeles County assessor median land ratio for zip 90802. No appraisal allocation is in any document provided."},{"id":"43d626a24a20b293","name":"long_beach.depreciation_2022","value":{"cents":2850909,"dollars":28509.09,"text":"$28,509.09"},"standing":"extracted_high","standingLabel":"read from document","kind":"extracted","describe":"read from 2022-form-1040-schedule-e p.2 (confidence 0.97): '18  Depreciation expense or depletion . . . 28,509'","children":[],"document_id":"2022-form-1040-schedule-e","page":2,"cited_text":"18  Depreciation expense or depletion . . . 28,509","confidence":"0.97"},{"id":"05252bb3588918b3","name":"long_beach.depreciation_2024","value":{"cents":3258182,"dollars":32581.82,"text":"$32,581.82"},"standing":"extracted_high","standingLabel":"read from document","kind":"extracted","describe":"read from 2024-form-1040-schedule-e p.2 (confidence 0.96): '18  Depreciation expense or depletion . . . 32,582'","children":[],"document_id":"2024-form-1040-schedule-e","page":2,"cited_text":"18  Depreciation expense or depletion . . . 32,582","confidence":"0.96"}],"ruleId":"exit-tax@2026.1","explanation":"amount realised less adjusted basis, split into unrecaptured section 1250, section 1245 ordinary recapture and capital gain, then taxed in the context of the whole household return"}},"after":{"canRecommend":true,"standing":"extracted_high","narrative":"Exit tax of $264,182.27 on a sale at $1,697,400.00, leaving $1,180,046.84 after tax and debt payoff. Every input traces to a document or an attestation; the derivation is attached.","exitTax":{"cents":26418227,"dollars":264182.27,"text":"$264,182.27"},"netAfterTax":{"cents":118004684,"dollars":1180046.84,"text":"$1,180,046.84"},"provenance":{"id":"d78e07fb393dff9e","name":"long_beach.exit_tax","value":{"cents":0,"dollars":0.0,"text":"$0.00"},"standing":"extracted_high","standingLabel":"read from document","kind":"derived","describe":"amount realised less adjusted basis, split into unrecaptured section 1250, section 1245 ordinary recapture and capital gain, then taxed in the context of the whole household return","children":[{"id":"2efdd52f280358a2","name":"long_beach.fmv_at_death","value":{"cents":112000000,"dollars":1120000.0,"text":"$1,120,000.00"},"standing":"attested","standingLabel":"attested","kind":"attested","describe":"attested by advisor:dana.reyes, CFP at 2026-09-18T10:30:00: date-of-death appraisal in the estate file, confirmed with client","children":[],"by":"advisor:dana.reyes, CFP","note":"date-of-death appraisal in the estate file, confirmed with client","at":"2026-09-18T10:30:00"},{"id":"5880de549daddc68","name":"long_beach.land_allocation","value":{"cents":22400000,"dollars":224000.0,"text":"$224,000.00"},"standing":"attested","standingLabel":"attested","kind":"attested","describe":"attested by advisor:dana.reyes, CFP at 2026-09-23T16:05:00: Client confirmed the 2019 date-of-death appraisal allocated 20% to land. The 2022 return was prepared on a 30% assumption in error.","children":[],"by":"advisor:dana.reyes, CFP","note":"Client confirmed the 2019 date-of-death appraisal allocated 20% to land. The 2022 return was prepared on a 30% assumption in error.","at":"2026-09-23T16:05:00"},{"id":"43d626a24a20b293","name":"long_beach.depreciation_2022","value":{"cents":2850909,"dollars":28509.09,"text":"$28,509.09"},"standing":"extracted_high","standingLabel":"read from document","kind":"extracted","describe":"read from 2022-form-1040-schedule-e p.2 (confidence 0.97): '18  Depreciation expense or depletion . . . 28,509'","children":[],"document_id":"2022-form-1040-schedule-e","page":2,"cited_text":"18  Depreciation expense or depletion . . . 28,509","confidence":"0.97"},{"id":"05252bb3588918b3","name":"long_beach.depreciation_2024","value":{"cents":3258182,"dollars":32581.82,"text":"$32,581.82"},"standing":"extracted_high","standingLabel":"read from document","kind":"extracted","describe":"read from 2024-form-1040-schedule-e p.2 (confidence 0.96): '18  Depreciation expense or depletion . . . 32,582'","children":[],"document_id":"2024-form-1040-schedule-e","page":2,"cited_text":"18  Depreciation expense or depletion . . . 32,582","confidence":"0.96"}],"ruleId":"exit-tax@2026.1","explanation":"amount realised less adjusted basis, split into unrecaptured section 1250, section 1245 ordinary recapture and capital gain, then taxed in the context of the whole household return"}}},"waterfall":{"pasadena":{"price":{"cents":146970000,"dollars":1469700.0,"text":"$1,469,700.00"},"sellingCosts":{"cents":8818200,"dollars":88182.0,"text":"$88,182.00"},"amountRealized":{"cents":138151800,"dollars":1381518.0,"text":"$1,381,518.00"},"adjustedBasis":{"cents":39024000,"dollars":390240.0,"text":"$390,240.00"},"totalGain":{"cents":99127800,"dollars":991278.0,"text":"$991,278.00"},"section1245Ordinary":{"cents":0,"dollars":0.0,"text":"$0.00"},"section1250Ordinary":{"cents":0,"dollars":0.0,"text":"$0.00"},"unrecaptured1250":{"cents":29056000,"dollars":290560.0,"text":"$290,560.00"},"capitalGain":{"cents":70071800,"dollars":700718.0,"text":"$700,718.00"},"debtPayoff":{"cents":43800000,"dollars":438000.0,"text":"$438,000.00"},"lienClearingCosts":{"cents":0,"dollars":0.0,"text":"$0.00"},"netCashBeforeTax":{"cents":94351800,"dollars":943518.0,"text":"$943,518.00"},"suspendedLossReleased":{"cents":18400000,"dollars":184000.0,"text":"$184,000.00"}},"austin":{"price":{"cents":76797000,"dollars":767970.0,"text":"$767,970.00"},"sellingCosts":{"cents":4607820,"dollars":46078.2,"text":"$46,078.20"},"amountRealized":{"cents":72189180,"dollars":721891.8,"text":"$721,891.80"},"adjustedBasis":{"cents":41555879,"dollars":415558.79,"text":"$415,558.79"},"totalGain":{"cents":30633301,"dollars":306333.01,"text":"$306,333.01"},"section1245Ordinary":{"cents":7900000,"dollars":79000.0,"text":"$79,000.00"},"section1250Ordinary":{"cents":2820000,"dollars":28200.0,"text":"$28,200.00"},"unrecaptured1250":{"cents":10354121,"dollars":103541.21,"text":"$103,541.21"},"capitalGain":{"cents":9559180,"dollars":95591.8,"text":"$95,591.80"},"debtPayoff":{"cents":40072382,"dollars":400723.82,"text":"$400,723.82"},"lienClearingCosts":{"cents":0,"dollars":0.0,"text":"$0.00"},"netCashBeforeTax":{"cents":32116798,"dollars":321167.98,"text":"$321,167.98"},"suspendedLossReleased":{"cents":9600000,"dollars":96000.0,"text":"$96,000.00"}},"long_beach":{"price":{"cents":169740000,"dollars":1697400.0,"text":"$1,697,400.00"},"sellingCosts":{"cents":10184400,"dollars":101844.0,"text":"$101,844.00"},"amountRealized":{"cents":159555600,"dollars":1595556.0,"text":"$1,595,556.00"},"adjustedBasis":{"cents":85629091,"dollars":856290.91,"text":"$856,290.91"},"totalGain":{"cents":73926509,"dollars":739265.09,"text":"$739,265.09"},"section1245Ordinary":{"cents":0,"dollars":0.0,"text":"$0.00"},"section1250Ordinary":{"cents":0,"dollars":0.0,"text":"$0.00"},"unrecaptured1250":{"cents":26370909,"dollars":263709.09,"text":"$263,709.09"},"capitalGain":{"cents":47555600,"dollars":475556.0,"text":"$475,556.00"},"debtPayoff":{"cents":15168449,"dollars":151684.49,"text":"$151,684.49"},"lienClearingCosts":{"cents":106000,"dollars":1060.0,"text":"$1,060.00"},"netCashBeforeTax":{"cents":144281151,"dollars":1442811.51,"text":"$1,442,811.51"},"suspendedLossReleased":{"cents":4150000,"dollars":41500.0,"text":"$41,500.00"}},"silver_lake":{"price":{"cents":122647500,"dollars":1226475.0,"text":"$1,226,475.00"},"sellingCosts":{"cents":7358850,"dollars":73588.5,"text":"$73,588.50"},"amountRealized":{"cents":115288650,"dollars":1152886.5,"text":"$1,152,886.50"},"adjustedBasis":{"cents":46290727,"dollars":462907.27,"text":"$462,907.27"},"totalGain":{"cents":68997923,"dollars":689979.23,"text":"$689,979.23"},"section1245Ordinary":{"cents":0,"dollars":0.0,"text":"$0.00"},"section1250Ordinary":{"cents":0,"dollars":0.0,"text":"$0.00"},"unrecaptured1250":{"cents":8629273,"dollars":86292.73,"text":"$86,292.73"},"capitalGain":{"cents":60368650,"dollars":603686.5,"text":"$603,686.50"},"debtPayoff":{"cents":33469620,"dollars":334696.2,"text":"$334,696.20"},"lienClearingCosts":{"cents":0,"dollars":0.0,"text":"$0.00"},"netCashBeforeTax":{"cents":81819030,"dollars":818190.3,"text":"$818,190.30"},"suspendedLossReleased":{"cents":2870000,"dollars":28700.0,"text":"$28,700.00"}}},"timeline":[{"year":2026,"event":"austin: rate resets 3.250% -> 5.250% on 2026-04-01"},{"year":2026,"event":"austin: PAYMENT SHOCK on 2026-04-01 - $1,997.60/mo becomes $2,456.43/mo (+23%)"},{"year":2027,"event":"austin: rate resets 5.250% -> 7.250% on 2027-04-01"},{"year":2027,"event":"austin: PAYMENT SHOCK on 2027-04-01 - $2,456.43/mo becomes $2,947.39/mo (+20%)"},{"year":2027,"event":"pasadena: PAYMENT SHOCK on 2027-07-01 - $1,551.25/mo becomes $2,712.25/mo (+75%)"},{"year":2028,"event":"austin: rate resets 7.250% -> 7.500% on 2028-04-01"},{"year":2043,"event":"pasadena: depreciation schedule exhausted - the shelter ends and taxable rental income steps up with no change to the property"},{"year":2045,"event":"long_beach: depreciation schedule exhausted - the shelter ends and taxable rental income steps up with no change to the property"},{"year":2047,"event":"silver_lake: depreciation schedule exhausted - the shelter ends and taxable rental income steps up with no change to the property"},{"year":2048,"event":"austin: depreciation schedule exhausted - the shelter ends and taxable rental income steps up with no change to the property"}]}</script>
+<script>
+const D = JSON.parse(document.getElementById('scenario').textContent);
+const $ = (s,r=document)=>r.querySelector(s);
+const el = (t,a={},...k)=>{const n=document.createElement(t);
+  for(const[p,v]of Object.entries(a)){ if(p==='class')n.className=v; else if(p==='html')n.innerHTML=v; else n.setAttribute(p,v);}
+  k.flat().forEach(c=>n.append(c&&c.nodeType?c:document.createTextNode(c??''))); return n;};
+const NS='http://www.w3.org/2000/svg';
+/* SVG elements must be created in the SVG namespace. document.createElement('svg')
+   returns an HTMLUnknownElement: it accepts children, reports no errors, and
+   renders absolutely nothing. */
+const svgEl=(t,a={})=>{const n=document.createElementNS(NS,t);
+  for(const[k,v]of Object.entries(a))n.setAttribute(k,v); return n;};
+const usd=(n,dp=0)=>n.toLocaleString('en-US',{style:'currency',currency:'USD',minimumFractionDigits:dp,maximumFractionDigits:dp});
+const compact=n=>Math.abs(n)>=1e6?'$'+(n/1e6).toFixed(1)+'M':Math.abs(n)>=1e3?'$'+Math.round(n/1e3)+'k':usd(n);
+
+const STANDING={attested:['b-attested','✓','attested'],extracted_high:['b-document','◈','read from document'],
+  extracted_low:['b-review','?','needs review'],assumed:['b-assumed','!','assumed']};
+function badge(s){const[c,g,l]=STANDING[s]||STANDING.assumed;
+  return el('span',{class:'badge '+c},el('span',{class:'g'},g),l);}
+
+/* ============================ meta ============================ */
+$('#meta').append(
+  el('span',{},'Rule set ',el('b',{},D.engineVersion)),
+  el('span',{},'Household ',el('b',{},D.household.name)),
+  el('span',{},'Suspended passive losses carried in ',el('b',{},D.household.suspendedPassiveLosses.text)),
+  el('span',{},D.properties.length+' properties · '+D.strategies.length+' strategies · 30-year horizon'));
+
+/* ============================ 1. portfolio ============================ */
+function viewPortfolio(){
+  const s=el('section',{role:'tabpanel'});
+  s.append(el('h2',{},'One household, four problems'),
+    el('p',{class:'lede'},'Real estate arrives across several documents and several years, and the same property '
+      +'reads differently in each. These four were chosen because between them they break most engines.'));
+  const led=el('div',{class:'ledger'});
+  led.append(el('div',{class:'lrow head'},el('div',{},'Property'),
+    el('div',{class:'v'},'Market value'),el('div',{class:'v'},'Adjusted basis'),
+    el('div',{class:'v'},'Debt'),el('div',{class:'v'},'Equity')));
+  D.properties.forEach(p=>{
+    const row=el('div',{class:'lrow'});
+    row.append(el('div',{class:'addr'},p.address.split(',')[0],
+      el('span',{class:'sub'},p.address.split(',').slice(1).join(',').trim()
+        +' · acquired '+p.acquired.slice(0,4)+' by '+p.acquisitionKind)),
+      el('div',{class:'v num'},el('span',{},'value'),compact(p.marketValue.dollars)),
+      el('div',{class:'v num'},el('span',{},'adj. basis'),compact(p.adjustedBasis.dollars)),
+      el('div',{class:'v num'},el('span',{},'debt'),compact(p.debt.dollars)),
+      el('div',{class:'v num'},el('span',{},'equity'),compact(p.equity.dollars)),
+      el('div',{class:'hard',html:'<b>What makes it hard.</b> '+p.whatMakesItHard}));
+    led.append(row);});
+  s.append(led);
+
+  const lb=D.properties.find(p=>p.id==='long_beach');
+  const pn=el('div',{class:'panel'},el('h3',{},'A lien stack a spreadsheet would silently drop'),
+    el('p',{class:'lede'},'Four of these five liens have a zero balance. They were paid off and never reconveyed, '
+      +'so they still cloud title, still cost money to release at closing, and still push any new borrowing down '
+      +'the stack. Filtering on balance greater than zero is exactly the bug.'));
+  const tw=el('div',{class:'scroll'}), t=el('table');
+  t.append(el('thead',{},el('tr',{},el('th',{},'Position'),el('th',{},'Lien'),el('th',{},'Balance'),el('th',{},'Release cost'))));
+  const tb=el('tbody');
+  lb.liens.forEach(l=>tb.append(el('tr',{},el('td',{},'#'+l.position),el('td',{},l.description),
+    el('td',{class:'num'},l.balance.text),el('td',{class:'num'},l.releaseCost.text))));
+  const clearing=lb.liens.reduce((a,l)=>a+l.releaseCost.dollars,0);
+  tb.append(el('tr',{},el('td',{},''),el('td',{html:'<b>Clearing costs a balance filter would miss</b>'}),
+    el('td',{},''),el('td',{class:'num',html:'<b>'+usd(clearing,2)+'</b>'})));
+  t.append(tb); tw.append(t); pn.append(tw); s.append(pn);
+  s.append(scheduleFigure());
+  return s;}
+
+function scheduleFigure(){
+  const au=D.properties.find(p=>p.id==='austin');
+  const pn=el('div',{class:'panel'});
+  pn.append(el('h3',{},'What a cost segregation study actually costs at exit'),
+    el('p',{class:'lede'},'The study splits the building into shorter-lived buckets and 100% bonus depreciation '
+      +'deducts them immediately. The 5- and 7-year buckets are section 1245 property, so every dollar comes back '
+      +'as ordinary income. The 15-year bucket is land improvements — section 1250 property, where only the '
+      +'excess over straight line is ordinary. Treating all three as 25% property understates the bill.'));
+  const W=760,H=210,L=142,R=18,T=14,B=34;
+  const rows=au.schedules.map(s=>({label:s.label,basis:s.basis.dollars,rec:s.recapture,cite:s.citation}));
+  const max=Math.max(...rows.map(r=>r.basis))*1.08;
+  const bh=26,gap=12;
+  const svg=svgEl('svg',{viewBox:`0 0 ${W} ${H}`,role:'img','aria-label':'Depreciable basis by bucket and recapture class'});
+  const mk=svgEl;
+  rows.forEach((r,i)=>{
+    const y=T+i*(bh+gap), w=Math.max(2,(r.basis/max)*(W-L-R));
+    const b=mk('rect',{x:L,y,width:w,height:bh,rx:3,fill:r.rec==='1245'?'var(--g1)':'var(--g3)'});
+    svg.append(b);
+    const lab=mk('text',{x:L-10,y:y+bh/2+4,'text-anchor':'end',class:'ax'}); lab.textContent=r.label; svg.append(lab);
+    const val=mk('text',{x:L+w+8,y:y+bh/2+4,class:'dl'}); val.textContent=usd(r.basis)+' · §'+r.rec; svg.append(val);});
+  pn.append(el('figure',{},svg,
+    el('div',{class:'legend'},
+      el('span',{html:'<i style="background:var(--g1)"></i>§1245 — all depreciation returns as ordinary income'}),
+      el('span',{html:'<i style="background:var(--g3)"></i>§1250 — only depreciation in excess of straight line'})),
+    el('figcaption',{html:'Land improvements reach a 15-year recovery period through '
+      +'<span class="mono">IRC 168(e)(1)</span> and Rev. Proc. 87-56 asset class 00.3, not through 168(e)(3)(E) — '
+      +'and Reg. 1.48-1(c) excludes &ldquo;land and improvements thereto&rdquo; from personal property, '
+      +'so they are §1250. This property carries '
+      +'<span class="hl">'+au.additional1250.text+'</span> of additional depreciation that recaptures as ordinary '
+      +'income, on top of '+au.accumulated1245.text+' of §1245.'})));
+  return pn;}
+
+/* ============================ 2. the gate ============================ */
+let attested=false;
+function viewGate(){
+  const s=el('section',{role:'tabpanel'});
+  const A=D.assessment;
+  s.append(el('h2',{},'The moment the engine refuses'),
+    el('p',{class:'lede'},'The advisor asks a simple question: should the client sell 1247 Ocean Blvd in '
+      +A.saleDate.slice(0,4)+' for '+A.salePrice.text+'? The engine can compute a number. It declines to, '
+      +'because one input that the answer hinges on is nobody’s.'));
+  const host=el('div',{id:'gatehost'}); s.append(host);
+  renderGate(host);
+  return s;}
+
+function renderGate(host){
+  const A=D.assessment; host.textContent='';
+  if(!attested){
+    const g=el('div',{class:'gate'});
+    g.append(el('div',{class:'gate-h'},el('span',{class:'t'},'Cannot recommend'),badge('assumed')));
+    // The panel heading already says "Cannot recommend"; don't say it twice.
+    g.append(el('p',{class:'say'},A.before.narrative.replace(/^Cannot recommend\.\s*/,'')));
+    A.before.questions.forEach(q=>{
+      const qq=el('div',{class:'q'});
+      qq.append(el('div',{class:'qh'},el('div',{class:'qp'},q.prompt),
+        el('div',{class:'impact num'},el('span',{},'moves the answer by'),q.dollarImpact.text)));
+      qq.append(el('p',{class:'why'},q.whyItMatters));
+      const cs=el('div',{class:'cands'});
+      q.candidates.forEach(c=>{
+        const cd=el('div',{class:'cand'});
+        cd.append(el('div',{class:'cv num'},c.value.text),el('div',{class:'cs'},c.source),
+          el('div',{class:'ci'},c.impliedBy));
+        cs.append(cd);});
+      qq.append(cs); qq.append(el('p',{class:'attest-note'},
+        'Note what the engine did not do: it did not average the two readings, and it did not return a '
+        +'number with a footnote. Both readings were filed. Only the owner knows which is right.'));
+      g.append(qq);});
+    const btn=el('button',{class:'attest-btn'},'Attest the 20% allocation from the 2024 return');
+    btn.onclick=()=>{attested=true; renderGate(host);};
+    g.append(btn);
+    g.append(el('p',{class:'attest-note'},'In the product this is the advisor putting their name to it. '
+      +'The attestation becomes part of the provenance chain permanently.'));
+    const pv=el('button',{class:'chip',style:'margin-top:16px'},'Show the derivation');
+    pv.onclick=()=>openDrawer(A.before.provenance); g.append(pv);
+    host.append(g);
+  } else {
+    const g=el('div',{class:'gate ok'});
+    g.append(el('div',{class:'gate-h'},el('span',{class:'t'},'Recommendation unlocked'),badge('attested')));
+    g.append(el('p',{class:'say'},A.after.narrative));
+    const grid=el('div',{style:'display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:20px;margin-top:20px;border-top:1px solid var(--rule);padding-top:20px'});
+    [['Exit tax',A.after.exitTax.text],['Net after tax and debt payoff',A.after.netAfterTax.text],
+     ['Sale price',A.salePrice.text],['Closing',A.saleDate]].forEach(([k,v])=>
+      grid.append(el('div',{},el('div',{style:'font-size:10.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-muted)'},k),
+        el('div',{class:'num',style:'font-size:21px;margin-top:4px'},v))));
+    g.append(grid);
+    g.append(el('p',{class:'attest-note'},'The attestation is recorded against the advisor who made it, with a '
+      +'timestamp and the reason. Twelve months from now, the answer to “why is this number what it is” '
+      +'is a name and a date, not a shrug.'));
+    const row=el('div',{style:'display:flex;gap:8px;flex-wrap:wrap;margin-top:16px'});
+    const pv=el('button',{class:'chip'},'Show the derivation'); pv.onclick=()=>openDrawer(A.after.provenance);
+    const rs=el('button',{class:'chip'},'Reset'); rs.onclick=()=>{attested=false; renderGate(host);};
+    row.append(pv,rs); g.append(row);
+    host.append(g);}}
+
+/* ============================ 3. exit tax waterfall ============================ */
+let wfProp='austin';
+function viewWaterfall(){
+  const s=el('section',{role:'tabpanel'});
+  s.append(el('h2',{},'Where the money goes'),
+    el('p',{class:'lede'},'A sale does not produce \u201ca gain\u201d. It produces up to four kinds, each taxed '
+      +'under a different rule. The slices below are ordered by what they cost — darkest is most expensive.'));
+  const chips=el('div',{class:'chips'});
+  D.properties.forEach(p=>{const b=el('button',{class:'chip','aria-pressed':String(p.id===wfProp)},p.address.split(',')[0]);
+    b.onclick=()=>{wfProp=p.id; const n=viewWaterfall(); s.replaceWith(n);}; chips.append(b);});
+  s.append(chips);
+  s.append(waterfallFigure(D.waterfall[wfProp], D.properties.find(p=>p.id===wfProp)));
+  return s;}
+
+function waterfallFigure(w,p){
+  const pn=el('div',{class:'panel'});
+  const slices=[
+    {k:'§1245 ordinary recapture',v:w.section1245Ordinary.dollars,c:'var(--g1)',r:'up to 37%'},
+    {k:'§1250(a) ordinary recapture',v:w.section1250Ordinary.dollars,c:'var(--g2)',r:'up to 37%'},
+    {k:'Unrecaptured §1250',v:w.unrecaptured1250.dollars,c:'var(--g3)',r:'up to 25%'},
+    {k:'Long-term capital gain',v:w.capitalGain.dollars,c:'var(--g4)',r:'0 / 15 / 20%'}].filter(x=>x.v>0.5);
+  const total=slices.reduce((a,x)=>a+x.v,0)||1;
+  const W=760,H=88,L=0,BH=38;
+  const svg=svgEl('svg',{viewBox:`0 0 ${W} ${H}`,role:'img','aria-label':'Gain split by tax character'});
+  const mk=svgEl;
+  let x=0;
+  slices.forEach((sl,i)=>{
+    const wd=(sl.v/total)*W;
+    svg.append(mk('rect',{x:x+(i?1:0),y:0,width:Math.max(1,wd-(i?2:1)),height:BH,rx:3,fill:sl.c}));
+    if(wd>72){const t1=mk('text',{x:x+wd/2,y:BH+18,'text-anchor':'middle',class:'dl'});t1.textContent=usd(sl.v);svg.append(t1);
+      const t2=mk('text',{x:x+wd/2,y:BH+32,'text-anchor':'middle',class:'ax'});t2.textContent=sl.r;svg.append(t2);}
+    x+=wd;});
+  pn.append(el('h3',{},p.address.split(',')[0]+' — gain of '+w.totalGain.text),
+    el('figure',{},svg,el('div',{class:'legend'},...slices.map(sl=>
+      el('span',{html:'<i style="background:'+sl.c+'"></i>'+sl.k+' · <span class="mono">'+usd(sl.v)+'</span>'})))));
+  const tw=el('div',{class:'scroll',style:'margin-top:22px'}),t=el('table');
+  t.append(el('thead',{},el('tr',{},el('th',{},'From gross price to cash in hand'),el('th',{},'Amount'))));
+  const tb=el('tbody');
+  [['Sale price',w.price],['Selling costs',w.sellingCosts],['Amount realised',w.amountRealized],
+   ['Adjusted basis',w.adjustedBasis],['Total gain',w.totalGain],['Debt payoff',w.debtPayoff],
+   ['Lien clearing costs',w.lienClearingCosts],['Net cash before tax',w.netCashBeforeTax],
+   ['Suspended passive losses released by the sale',w.suspendedLossReleased]].forEach(([k,v])=>
+    tb.append(el('tr',{},el('td',{},k),el('td',{class:'num'},v.text))));
+  t.append(tb);tw.append(t);pn.append(tw);
+  pn.append(el('figcaption',{html:'The last line is the one a per-property calculator cannot see. Selling this '
+    +'property is a fully taxable disposition, so IRC 469(g) releases its entire suspended passive-loss stack at '
+    +'once — and those losses are no longer passive, so they shelter wage income and gain on the other '
+    +'properties too.'}));
+  return pn;}
+
+/* ============================ 4. strategies ============================ */
+function viewStrategies(){
+  const s=el('section',{role:'tabpanel'});
+  s.append(el('h2',{},'Hold, sell, or exchange'),
+    el('p',{class:'lede'},'Five paths over thirty years, each run through the same deterministic engine. '
+      +'Ranked on present value, because without discounting “hold forever” wins by default — a '
+      +'dollar of tax deferred for thirty years is not a dollar of tax avoided.'));
+  s.append(npvFigure());
+  s.append(netWorthFigure());
+  s.append(strategyTable());
+  return s;}
+
+function npvFigure(){
+  const pn=el('div',{class:'panel'});
+  const rows=D.strategies.map(s=>({n:s.name,v:s.npv.dollars,d:s.description})).sort((a,b)=>b.v-a.v);
+  // R leaves room for the widest value label; at R=20 the leading bar's
+  // label ran off the viewBox.
+  const max=Math.max(...rows.map(r=>r.v))*1.06, W=760,L=236,R=96,bh=28,gap=11,T=6;
+  const H=T+rows.length*(bh+gap);
+  const svg=svgEl('svg',{viewBox:`0 0 ${W} ${H}`,role:'img','aria-label':'Present value by strategy'});
+  const mk=svgEl;
+  rows.forEach((r,i)=>{
+    const y=T+i*(bh+gap), w=Math.max(2,(r.v/max)*(W-L-R));
+    svg.append(mk('rect',{x:L,y,width:w,height:bh,rx:3,fill:i===0?'var(--g2)':'var(--g4)'}));
+    const lb=mk('text',{x:L-12,y:y+bh/2+4,'text-anchor':'end',class:'ax'});lb.textContent=r.n;svg.append(lb);
+    const vl=mk('text',{x:L+w+9,y:y+bh/2+4,class:'dl'});vl.textContent=usd(r.v);svg.append(vl);});
+  pn.append(el('h3',{},'Present value of after-tax cash flow plus terminal net worth'),
+    el('figure',{},svg,el('figcaption',{html:'<b>'+rows[0].n+'</b> leads. '+rows[0].d})));
+  return pn;}
+
+function netWorthFigure(){
+  const pn=el('div',{class:'panel'});
+  const W=760,H=310,L=62,R=118,T=16,B=34;
+  const ys=D.strategies[0].years.map(y=>y.year);
+  const all=D.strategies.flatMap(s=>s.years.map(y=>y.netWorth));
+  const max=Math.max(...all)*1.05, min=0;
+  const X=i=>L+(i/(ys.length-1))*(W-L-R);
+  const Y=v=>T+(1-(v-min)/(max-min))*(H-T-B);
+  const svg=svgEl('svg',{viewBox:`0 0 ${W} ${H}`,role:'img','aria-label':'Net worth over 30 years by strategy'});
+  const mk=svgEl;
+  for(let g=0;g<=4;g++){const v=min+(max-min)*g/4, y=Y(v);
+    svg.append(mk('line',{x1:L,x2:W-R,y1:y,y2:y,stroke:'var(--grid)','stroke-width':1}));
+    const t=mk('text',{x:L-10,y:y+4,'text-anchor':'end',class:'ax'});t.textContent=compact(v);svg.append(t);}
+  ys.forEach((yr,i)=>{ if(i%6===0||i===ys.length-1){
+    const t=mk('text',{x:X(i),y:H-B+20,'text-anchor':'middle',class:'ax'});t.textContent=yr;svg.append(t);}});
+  const cols=['var(--s1)','var(--s2)','var(--s3)','var(--s4)','var(--s5)'];
+  const ends=[];
+  D.strategies.forEach((s,si)=>{
+    const d=s.years.map((y,i)=>(i?'L':'M')+X(i).toFixed(1)+' '+Y(y.netWorth).toFixed(1)).join(' ');
+    svg.append(mk('path',{d,fill:'none',stroke:cols[si],'stroke-width':2,'stroke-linejoin':'round','stroke-linecap':'round'}));
+    const last=s.years[s.years.length-1];
+    ends.push({y:Y(last.netWorth),v:last.netWorth,c:cols[si]});});
+  // Two strategies can finish within a few pixels of each other, and their
+  // direct labels then overprint. Nudge them apart in sorted order, keeping
+  // each label's vertical order the same as its line's.
+  ends.sort((a,b)=>a.y-b.y);
+  const MINGAP=15;
+  for(let i=1;i<ends.length;i++)
+    if(ends[i].y-ends[i-1].y<MINGAP) ends[i].y=ends[i-1].y+MINGAP;
+  ends.forEach(e=>{const t=mk('text',{x:W-R+8,y:e.y+4,class:'dl',fill:e.c});
+    t.textContent=compact(e.v); svg.append(t);});
+  pn.append(el('h3',{},'Net worth, 2026 to 2055'),
+    el('figure',{},svg,el('div',{class:'legend'},...D.strategies.map((s,i)=>
+      el('span',{html:'<i style="background:'+cols[i]+'"></i>'+s.name}))),
+    el('figcaption',{html:'Sale proceeds are held as cash and do not appreciate, which flatters holding and '
+      +'exchanging. The present-value ranking above is the fairer comparison, and the table below carries the '
+      +'same figures for anyone who would rather read than squint.'})));
+  return pn;}
+
+function strategyTable(){
+  const pn=el('div',{class:'panel'});
+  const best=Math.max(...D.strategies.map(s=>s.npv.dollars));
+  const tw=el('div',{class:'scroll'}),t=el('table');
+  t.append(el('thead',{},el('tr',{},el('th',{},'Strategy'),el('th',{},'Terminal net worth'),
+    el('th',{},'Cumulative tax'),el('th',{},'Present value'))));
+  const tb=el('tbody');
+  D.strategies.forEach(s=>tb.append(el('tr',{},el('td',{},s.name),
+    el('td',{class:'num'},s.terminalNetWorth.text),el('td',{class:'num'},s.cumulativeTax.text),
+    el('td',{class:'num'+(s.npv.dollars===best?' best':'')},s.npv.text))));
+  t.append(tb);tw.append(t);
+  pn.append(el('h3',{},'The same figures as a table'),tw,
+    el('figcaption',{html:'Ledger hashes: '+D.strategies.map(s=>'<span class="mono">'+s.ledgerHash.slice(0,8)+'</span>').join(' · ')
+      +'. Replaying any scenario reproduces its hash byte for byte, which is what makes &ldquo;is this the number '
+      +'I showed the client in March&rdquo; a question with an answer.'}));
+  return pn;}
+
+/* ============================ 5. watchtower ============================ */
+function viewTimeline(){
+  const s=el('section',{role:'tabpanel'});
+  s.append(el('h2',{},'What the engine saw coming'),
+    el('p',{class:'lede'},'None of these need a market move or a client decision to happen. They are already '
+      +'in the documents, and the software should say so years ahead rather than the client discovering it.'));
+  const tl=el('div',{class:'tl'});
+  D.timeline.forEach(t=>{
+    let txt=t.event, lead='';
+    const m=txt.match(/^([a-z_]+): (.*)$/);
+    if(m){lead=m[1].replace(/_/g,' '); txt=m[2];}
+    tl.append(el('div',{},el('div',{class:'y num'},t.year),
+      el('div',{},el('em',{},lead?lead+' — ':''),txt)));});
+  s.append(tl);
+  s.append(el('div',{class:'panel'},el('h3',{},'Why statutory thresholds matter over thirty years'),
+    el('p',{class:'lede',html:'Most tax parameters are indexed for inflation. Several that matter most to real '
+      +'estate are not, and never have been: the net investment income tax thresholds have been frozen at '
+      +'<span class="mono">$250,000</span> since 2013, the section 469 allowance at '
+      +'<span class="mono">$25,000</span> since 1986, and the section 121 exclusion at '
+      +'<span class="mono">$500,000</span> since 1997. Projecting a portfolio forward with everything indexed '
+      +'produces a household whose tax picture looks stable forever. It is not — those thresholds fall in '
+      +'real terms every year, and a household comfortably under one today crosses it on a date the engine '
+      +'can name.'})));
+  return s;}
+
+/* ============================ provenance drawer ============================ */
+function openDrawer(node){
+  const b=$('#dbody'); b.textContent='';
+  b.append(treeOf(node)); $('#drawer').hidden=false; $('#dclose').focus();}
+function treeOf(n){
+  const ul=el('ul',{class:'tree'}), li=el('li',{});
+  const head=el('div',{style:'display:flex;gap:10px;align-items:baseline;flex-wrap:wrap'},
+    el('span',{class:'nm'},n.name.split('.').pop().replace(/_/g,' ')),
+    el('span',{class:'vl num'},typeof n.value==='object'?n.value.text:n.value), badge(n.standing));
+  li.append(head, el('div',{class:'ds'},n.describe));
+  if(n.cited_text) li.append(el('div',{class:'quote'},n.cited_text));
+  if(n.children&&n.children.length){const sub=el('ul',{});
+    n.children.forEach(c=>sub.append(treeOf(c).firstChild)); li.append(sub);}
+  ul.append(li); return ul;}
+$('#dclose').onclick=()=>$('#drawer').hidden=true;
+$('#drawer').onclick=e=>{if(e.target===$('#drawer'))$('#drawer').hidden=true;};
+addEventListener('keydown',e=>{if(e.key==='Escape')$('#drawer').hidden=true;});
+
+/* ============================ tabs ============================ */
+const VIEWS=[['Portfolio',viewPortfolio],['The gate',viewGate],['Exit tax',viewWaterfall],
+  ['Strategies',viewStrategies],['Watchtower',viewTimeline]];
+const tabs=$('#tabs'), main=$('#main');
+let active=1;
+function paint(){
+  tabs.textContent=''; main.textContent='';
+  VIEWS.forEach(([name,fn],i)=>{
+    const b=el('button',{role:'tab','aria-selected':String(i===active)},name);
+    b.onclick=()=>{active=i; paint(); try{localStorage.setItem('sb.tab',String(i));}catch(e){}};
+    tabs.append(b);});
+  main.append(VIEWS[active][1]());}
+try{const t=localStorage.getItem('sb.tab'); if(t!==null&&VIEWS[+t])active=+t;}catch(e){}
+paint();
+</script>
