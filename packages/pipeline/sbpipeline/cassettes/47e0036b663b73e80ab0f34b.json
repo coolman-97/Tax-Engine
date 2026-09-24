@@ -1,0 +1,32 @@
+{
+ "id": "msg_011CfNLazNfFGjnhS2HKvUMY",
+ "container": null,
+ "content": [
+  {
+   "citations": null,
+   "text": "{\"properties\": [{\"property_label\": \"1247 Ocean Blvd, Long Beach, CA 90802\", \"tax_year\": 2018, \"rents_received\": null, \"total_expenses\": null, \"mortgage_interest\": null, \"depreciation\": 23758, \"insurance\": null, \"property_taxes\": null, \"date_placed_in_service\": \"2018-03-01\", \"cost_or_basis\": 784000, \"recovery_period_years\": 27.5}]}",
+   "type": "text"
+  }
+ ],
+ "model": "claude-haiku-4-5-20251001",
+ "role": "assistant",
+ "stop_details": null,
+ "stop_reason": "end_turn",
+ "stop_sequence": null,
+ "type": "message",
+ "usage": {
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 0,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "cache_creation_input_tokens": 0,
+  "cache_read_input_tokens": 0,
+  "inference_geo": "not_available",
+  "input_tokens": 929,
+  "output_tokens": 122,
+  "output_tokens_details": null,
+  "server_tool_use": null,
+  "service_tier": "standard"
+ },
+ "diagnostics": null
+}

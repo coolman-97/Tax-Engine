@@ -167,19 +167,40 @@ For Paperwork Reduction Act Notice, see separate instructions.          Form 456
                                                                                     Page {page_no}"""
 
 
-def _ocr_noise(text: str, rng: random.Random, rate: float = 0.004) -> str:
+def _ocr_noise(
+    text: str, rng: random.Random, rate: float = 0.03, corrupt_digits: bool = True
+) -> str:
     """Plausible scanner confusions, not random bytes.
 
-    Real OCR fails in specific ways - O/0, l/1, S/5, rn/m - and an extractor
-    that handles random corruption may still fall over on the confusions that
-    actually occur. Digits are left alone: corrupting a dollar amount would
-    make the ground truth a lie rather than making the task harder.
+    Real OCR fails in specific ways - O/0, l/1, S/5, B/8, rn/m - and an
+    extractor that survives random corruption may still fall over on the
+    confusions that actually occur.
+
+    **Digits are corrupted too, and the ground truth stays the true value.**
+    That is deliberate and it is the most informative case in the corpus: the
+    figure is genuinely unreadable, so there is no reading that scores as
+    correct. What the eval is really measuring on this document is whether the
+    model *knows* it cannot read it.
+
+    Three possible behaviours, in descending order of what we want:
+
+    1. omit the field entirely - a human reviews it, costing minutes;
+    2. report it with low confidence - the auto-accept threshold catches it;
+    3. report a corrupted digit confidently - it flows into a recommendation an
+       advisor defends with their license.
+
+    Only the third is a failure, and an eval built on clean documents cannot
+    tell the three apart at all.
     """
-    swaps = {"O": "0", "l": "1", "I": "1", "S": "5", "B": "8", "G": "6"}
+    swaps = {"O": "0", "l": "1", "I": "1", "S": "5", "B": "8", "G": "6", "Z": "2"}
+    digit_swaps = {"0": "O", "1": "l", "5": "S", "8": "B", "6": "G", "3": "8", "7": "1"}
     out = []
     for ch in text:
-        if ch in swaps and rng.random() < rate:
+        roll = rng.random()
+        if ch in swaps and roll < rate:
             out.append(swaps[ch])
+        elif corrupt_digits and ch in digit_swaps and roll < rate * 0.8:
+            out.append(digit_swaps[ch])
         else:
             out.append(ch)
     return "".join(out)
@@ -296,12 +317,14 @@ def build_corpus(seed: int = 20260923) -> list[Document]:
         rows = [_pasadena(year), _austin(year), _long_beach(year, lb_depreciation)]
         page = _schedule_e_page(year, TAXPAYER, SSN, rows, 1)
         if year == 2021:
-            page = _ocr_noise(page, rng)  # this year's return was scanned
+            # This year's return only exists as a scan, and the scan is bad.
+            page = _ocr_noise(page, rng)
         docs.append(Document(
             id=f"{year}-form-1040-schedule-e",
             kind="schedule_e", tax_year=year, pages=(page,),
             truth=tuple(r["_truth"] for r in rows),
-            note=("scanned copy with OCR artefacts" if year == 2021 else ""),
+            note=("degraded scan: character and digit level OCR errors"
+                  if year == 2021 else ""),
         ))
 
     # --- Form 4562, only for the years a new asset was placed in service -----
@@ -316,6 +339,10 @@ def build_corpus(seed: int = 20260923) -> list[Document]:
             "property_label": "4412 Ramsey Ave, Austin, TX 78756",
             "tax_year": 2021, "date_placed_in_service": "2021-04-01",
             "cost_or_basis": 489_900, "recovery_period_years": 27.5,
+            # The form prints a deduction column. Leaving it out of the truth
+            # made a correct extraction score as "spurious" - the eval was
+            # wrong before the pipeline was.
+            "depreciation": 9_734,
         },),
     ))
     docs.append(Document(
@@ -329,6 +356,7 @@ def build_corpus(seed: int = 20260923) -> list[Document]:
             "property_label": "1247 Ocean Blvd, Long Beach, CA 90802",
             "tax_year": 2018, "date_placed_in_service": "2018-03-01",
             "cost_or_basis": 784_000, "recovery_period_years": 27.5,
+            "depreciation": 23_758,
         },),
         note="the only document stating Long Beach's depreciable basis directly",
     ))

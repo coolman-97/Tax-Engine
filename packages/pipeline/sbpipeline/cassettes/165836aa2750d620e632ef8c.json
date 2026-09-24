@@ -1,0 +1,39 @@
+{
+ "id": "msg_011CfNLTLoGFH4v3ixjas34N",
+ "container": null,
+ "content": [
+  {
+   "signature": "CAISugcKjgEIEhgCKkCl+X9Fj03ZAYPaMZGy+/8W9EXAx6+HBbEfdS1V9LPMAPL5z2qMrbB37fyGxJMbWuquRNds24NRDB83+0K170S8Mg1jbGF1ZGUtb3B1cy01OAFCCHRoaW5raW5nWiQ4MjE1MGJjMC00NGViLTQ4OWItOWY3Yy1mMzJhODExNmZiNjmoAbnI1NUGEgxCsGN8xK1jmIbnWnUaDEjBEytayLG/ZtUdniIwbBWd+3b3I+z66zAhqyvNPqAdgg6w2IrTMcjiYxOEC7LY3zahdy4W9JX7pzDx4HTHKtgF3jHECMN2Lsjvf7QKwMg7CxtGQRQrfEka+ZO4os/wmx3bJ190mQbB+J399g9cwts9Ir4NBY/SiWmzlG+N2tdAvLHJ0RIceYhPL7mp3/c1mAUerp/QvHnMOitOQWWllCYlAeYZL1BMlWpohZZ611P1MmL3YM6LInW9W0Gfs2HHQQ5aGdXe4/yQZd34W1fbk0JWDL0q/UplZHSz9fXA+rEaDzXak8wi1Qd+ZYkd5UWaiYLdKkLvDhsT3YMcVyG2DxmpROsrrWBnyYPMeSaSrIbYaPp6WLPOjKNza1QaKkeCj6P4JdSVOkV7PCmsI4HXbKktnGBAgcRBPMvyl+ZGrMmlcC6ZQIN2XwTlW0p6L+UDh7e4pBVE6VqbGSdyJ7j+hJA6NMbH6nTcL4RD7BJ84VW1LVkoCI2yM92Z4oYETg9D73LAHVRrAFPLC2o2JwCjCgRC9Lyp+3IzTdXQfSUZABlCfYnavpLqvBs8vyxcf1voXprQIXu9XNUVX16G5C4DJomtC0Pg/ND69aN6F4WJiFsxdcoI+AgHw6gyv1xkMqaRG4z3UeqCPqQiDKE8LSmvYduOr0LO+WsHiywGuptYnY+8Mybw/M9YYBwImTu6GYI5gxcp4dXPLDVqaTlki6ld3CPrCK+ef/IBxYMPIRWb04FZQffq7BiV2WfNdsozGbAiRvhFS+PVo7/TmMOHXjweEN/NA6nrOPZ34x2obqS2wKIfGtmLdsPUHUty3VJPmXF1gYuMV/wymO4e+hhBYxa5pd3pRCvsQbfjzF8liaeZL2EtxPMpB591PCMyki+5QhSstpgbs+ED08pD5/+dvvzipVfYrXEBCq28Fy6l2oE3GnvAOO16d6t1SRJih9Nb9VJWx5aYNntGQU4Iw70GE5wpLZ+SGIdbA/rD4SZPm/79wDd4iq50mYhrvpsUWPoxfq63qooHOz4weZnSqs7BExiQgUCLUsT+gkKXtoQYAQ==",
+   "thinking": "",
+   "type": "thinking"
+  },
+  {
+   "citations": null,
+   "text": "A :: property_label :: 1247 Ocean Blvd, Long Beach, CA 90802\nA :: date_placed_in_service :: 03/2018\nA :: cost_or_basis :: 784,000\nA :: recovery_period_years :: 27.5 yrs\nA :: depreciation :: 23,758",
+   "type": "text"
+  }
+ ],
+ "model": "claude-opus-5",
+ "role": "assistant",
+ "stop_details": null,
+ "stop_reason": "end_turn",
+ "stop_sequence": null,
+ "type": "message",
+ "usage": {
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 0,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "cache_creation_input_tokens": 0,
+  "cache_read_input_tokens": 1350,
+  "inference_geo": "global",
+  "input_tokens": 1005,
+  "output_tokens": 366,
+  "output_tokens_details": {
+   "thinking_tokens": 261
+  },
+  "server_tool_use": null,
+  "service_tier": "standard"
+ },
+ "diagnostics": null
+}

@@ -184,3 +184,57 @@ def test_cassette_round_trips(tmp_path):
     assert c.get(req) is None
     c.put(req, {"content": [{"type": "text", "text": "hello"}]})
     assert c.get(req)["content"][0]["text"] == "hello"
+
+
+# --------------------------------------------------------------------------
+# The eval itself, replayed offline
+# --------------------------------------------------------------------------
+def test_the_eval_replays_entirely_from_cassettes():
+    """No key, no network, and every call must hit a recording.
+
+    A miss here means the corpus or a prompt changed without the cassettes
+    being re-recorded - at which point docs/EVALS.md is reporting numbers for
+    a pipeline that no longer exists.
+    """
+    from sbpipeline.evals.run import run
+
+    report = run(live=False, record=False)
+    assert not report["errors"], f"cassette misses: {report['errors'][:2]}"
+    assert report["cassette"].startswith("10/10"), report["cassette"]
+    assert report["evidence_spans"] > 50
+
+
+def test_extraction_holds_its_measured_quality():
+    """A regression gate on the numbers in docs/EVALS.md.
+
+    Deliberately a floor rather than an equality: the point is to catch a
+    regression, not to pin the pipeline to one run.
+    """
+    from sbpipeline.evals.run import run
+
+    report = run(live=False, record=False)
+    assert report["weighted_recall"] >= 0.95, report["weighted_recall"]
+    for name, s in report["fields"].items():
+        if s["weight"] == "critical" and s["precision"] is not None:
+            assert s["precision"] >= 0.95, f"{name} precision {s['precision']}"
+
+
+def test_the_degraded_scan_did_not_silently_lose_a_corrupted_figure():
+    """On the 2021 scan, $18,615 of mortgage interest is corrupted to
+    'l8,615'. The pipeline recovers it from the form's arithmetic. If that ever
+    regresses to a confident wrong number, this fails."""
+    from sbpipeline.evals.run import judge
+    from sbpipeline.extract import Extractor
+
+    scan = next(d for d in build_corpus()
+                if d.tax_year == 2021 and d.kind == "schedule_e")
+    assert "l8,615" in scan.pages[0], "the corpus no longer corrupts that figure"
+
+    ex = Extractor(live=False)
+    judged = judge([ex.extract(scan)], GOLDEN())
+    interest = [j for j in judged if j.field == "mortgage_interest"]
+    assert interest, "mortgage interest was not scored at all"
+    assert all(j.outcome != "wrong" for j in interest), (
+        "a corrupted figure was reported as a confident wrong value: "
+        f"{[(j.expected, j.got) for j in interest if j.outcome == 'wrong']}"
+    )

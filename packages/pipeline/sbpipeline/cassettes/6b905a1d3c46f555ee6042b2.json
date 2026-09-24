@@ -1,0 +1,32 @@
+{
+ "id": "msg_011CfNLanqsdqqjhgpN9rsKL",
+ "container": null,
+ "content": [
+  {
+   "citations": null,
+   "text": "{\"properties\": [{\"property_label\": \"4412 Ramsey Ave, Austin, TX 78756\", \"tax_year\": 2021, \"rents_received\": null, \"total_expenses\": null, \"mortgage_interest\": null, \"depreciation\": 9734, \"insurance\": null, \"property_taxes\": null, \"date_placed_in_service\": \"2021-04-01\", \"cost_or_basis\": 489900, \"recovery_period_years\": 27.5}]}",
+   "type": "text"
+  }
+ ],
+ "model": "claude-haiku-4-5-20251001",
+ "role": "assistant",
+ "stop_details": null,
+ "stop_reason": "end_turn",
+ "stop_sequence": null,
+ "type": "message",
+ "usage": {
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 0,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "cache_creation_input_tokens": 0,
+  "cache_read_input_tokens": 0,
+  "inference_geo": "not_available",
+  "input_tokens": 1060,
+  "output_tokens": 120,
+  "output_tokens_details": null,
+  "server_tool_use": null,
+  "service_tier": "standard"
+ },
+ "diagnostics": null
+}

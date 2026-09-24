@@ -1,0 +1,129 @@
+{
+ "id": "msg_011CfNLSgTgJ1kEZ9y6BEZiS",
+ "container": null,
+ "content": [
+  {
+   "signature": "CAIStAgKjgEIEhgCKkDr852/Vdsz7zKdAkIk5BfYclEITz3UsqQleSuOZ7s1Jcex5hGYsn4mGpcOKddcGx656CFHchBvx2fz2HQbD8icMg1jbGF1ZGUtb3B1cy01OAFCCHRoaW5raW5nWiQ4MjE1MGJjMC00NGViLTQ4OWItOWY3Yy1mMzJhODExNmZiNjmoAbHI1NUGEgw2gD5hL54v3DaHlc0aDA73EyeGut8WTwKeRiIwt1Wr8QwIJ2enkHJpzxmfMJ+7YCvja0pMuC6M3Xkr9THIvWioW00c/ciXC1+5gmznKtIGbWpV4jWLZm/QttF4qPwO5gT8QHUHnh1Fy8Bg0e5wh13UnkL8b7DWJ7KrbwJrBI+br9tohBlis4YPC2NoyBCt7FeaYwCiTeaxEP4JS1jQC5CYaOSTBVIz1aI4gZqLKv4LWykDuGsmdzkZ/+BesPbTr3tIJ2WawATVOE88GZbyIHSUGvnuZyTelwkB7maA2m782FONfU9xQZXw98cLbjFxQ+jFISRB7I7vlNsybhIA6m/mbhaE5w/9fEzEly0NxznNhkjYz5M0vRAVLnkPcjVso+1qzYMt3PKN1iYuE5uv0GwVRkNn20wadOHhrRstYkyXCVLZN2eI3agRbg2HIrw1M+YznlOj+Hu+aC3ZCm9lUb4GFYFWihJ33D0RA6VHCcJ9iBGfbLW6xNf0G8HPEGx0FmVWaOpAhgiu30tkv9QdI9U1z5jvkKQgj8XHvIyMjxbP2IjTnjq2XX9wJDmBA3ykBnZBUMhyNNyviW9XfJbAuZEdFOCEvf4gT0nw6fGshSBPi3XNaDA3YVAOql7juoDeA5rib4vq7EpOyEHGrfYRnPi4PewPOXEEvHaU0D5pVEqIFR626ViivZ54JF9Nftzt6PicVSkZQkIJm8BP6Spd0ad50M2fPFvoyRvdHTBFrSMYiQ3Jh0av+cPFmYdwqIHVx9iQp7FAfKCqCVxMYo6CKgIA1+5q+e+X8pUngC5TFfSWAQUVZwodWQmQ0kB/ViNoeV+qo3vo0OkbbSalljq/cY8kGwxQYkLZAQzbCP+/uh1VVU7VNFoiA6Iw5neyZQ+YxPQIdhGdQ3w/I0vrFtm3JI+IAT5siatliYi1UHMWRYn1hYd1eRHf1RM1J9D5SlPPk0Mc1NrehF5UX+vIq8gaZaJBNCxvy2vhMfd3V+sGNEBkwYlDKvRRk8IxySmbr+TJ7WZHWwLNme4mr5Aynk/Zt4ghixg7po5YVIYbtzhuwMM79yEWT9fs8OLTib7tFeRpJkOIx+/pZ3KAiS7pBS7rQ9xYxzkbYHFFg95QT+rns2+snvez2tvS6e3jqKiWumd+CZGvqtJErOF6fybq2z9hJARDxVKsTdSNbj5qMUjmq8F8oj/DtvznaJfaDIRWo/qy9M5NX1ms2kpG8ERG9N4XSAadQRgB",
+   "thinking": "",
+   "type": "thinking"
+  },
+  {
+   "citations": [
+    {
+     "cited_text": "  19h  Residential rental        04/2021            489,900       27.5 yrs    MM      S/L             9,734       4412 Ramsey Ave, Austin, TX 78756",
+     "document_index": 0,
+     "document_title": "2021-form-4562",
+     "end_block_index": 20,
+     "file_id": null,
+     "start_block_index": 18,
+     "type": "content_block_location"
+    }
+   ],
+   "text": "A :: property_label :: 4412 Ramsey Ave, Austin, TX 78756",
+   "type": "text"
+  },
+  {
+   "citations": null,
+   "text": "\n",
+   "type": "text"
+  },
+  {
+   "citations": [
+    {
+     "cited_text": "  19h  Residential rental        04/2021            489,900       27.5 yrs    MM      S/L             9,734",
+     "document_index": 0,
+     "document_title": "2021-form-4562",
+     "end_block_index": 19,
+     "file_id": null,
+     "start_block_index": 18,
+     "type": "content_block_location"
+    }
+   ],
+   "text": "A :: date_placed_in_service :: 04/2021",
+   "type": "text"
+  },
+  {
+   "citations": null,
+   "text": "\n",
+   "type": "text"
+  },
+  {
+   "citations": [
+    {
+     "cited_text": "  19h  Residential rental        04/2021            489,900       27.5 yrs    MM      S/L             9,734",
+     "document_index": 0,
+     "document_title": "2021-form-4562",
+     "end_block_index": 19,
+     "file_id": null,
+     "start_block_index": 18,
+     "type": "content_block_location"
+    }
+   ],
+   "text": "A :: cost_or_basis :: 489,900",
+   "type": "text"
+  },
+  {
+   "citations": null,
+   "text": "\n",
+   "type": "text"
+  },
+  {
+   "citations": [
+    {
+     "cited_text": "  19h  Residential rental        04/2021            489,900       27.5 yrs    MM      S/L             9,734",
+     "document_index": 0,
+     "document_title": "2021-form-4562",
+     "end_block_index": 19,
+     "file_id": null,
+     "start_block_index": 18,
+     "type": "content_block_location"
+    }
+   ],
+   "text": "A :: recovery_period_years :: 27.5 yrs",
+   "type": "text"
+  },
+  {
+   "citations": null,
+   "text": "\n",
+   "type": "text"
+  },
+  {
+   "citations": [
+    {
+     "cited_text": "  19h  Residential rental        04/2021            489,900       27.5 yrs    MM      S/L             9,734",
+     "document_index": 0,
+     "document_title": "2021-form-4562",
+     "end_block_index": 19,
+     "file_id": null,
+     "start_block_index": 18,
+     "type": "content_block_location"
+    }
+   ],
+   "text": "A :: depreciation :: 9,734",
+   "type": "text"
+  }
+ ],
+ "model": "claude-opus-5",
+ "role": "assistant",
+ "stop_details": null,
+ "stop_reason": "end_turn",
+ "stop_sequence": null,
+ "type": "message",
+ "usage": {
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 0,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "cache_creation_input_tokens": 0,
+  "cache_read_input_tokens": 1350,
+  "inference_geo": "global",
+  "input_tokens": 1003,
+  "output_tokens": 502,
+  "output_tokens_details": {
+   "thinking_tokens": 300
+  },
+  "server_tool_use": null,
+  "service_tier": "standard"
+ },
+ "diagnostics": null
+}

@@ -45,6 +45,29 @@ PRICES = {
     "claude-haiku-4-5": (1.00, 5.00),
 }
 
+def _blocks_and_pages(doc: Document) -> tuple[list[dict], list[int]]:
+    """Chunk the document into one content block per line.
+
+    Citation granularity equals content-block granularity. Send a page as one
+    block and every citation comes back quoting the entire page - 2,000
+    characters of form header, useless as evidence a human can check in two
+    seconds. Send it a line at a time and a citation quotes the actual form
+    line, which is exactly the span an advisor needs to see.
+
+    Returns the blocks and a parallel list mapping block index to page number,
+    so `content_block_location.start_block_index` resolves to a page.
+    """
+    blocks: list[dict] = []
+    page_of: list[int] = []
+    for page_no, page in enumerate(doc.pages, start=1):
+        for line in page.split("\n"):
+            if not line.strip():
+                continue
+            blocks.append({"type": "text", "text": line})
+            page_of.append(page_no)
+    return blocks, page_of
+
+
 EVIDENCE_SYSTEM = """\
 You are reading a US federal tax document for a financial advisor who will rely \
 on these figures to advise a client on a property worth more than a million \
@@ -54,10 +77,17 @@ Your ONLY job in this step is to FIND and QUOTE. Do not compute anything. Do \
 not sum columns. Do not convert or reformat numbers. Do not infer a value that \
 is not written down.
 
-For each rental property on the form, output one line per figure you can find, \
-in exactly this format:
+Output ONLY data lines, in exactly this format, one per line:
 
-  <property letter or label> :: <field_name> :: <the figure exactly as written>
+  <property letter> :: <field_name> :: <the figure exactly as written>
+
+The property letter, the field name and the value must all be on the SAME \
+line. Write no prose, no headings, no commentary, and no summary - not before \
+the lines, not after them.
+
+Cover EVERY property on the form. Schedule E has columns A, B and C; if all \
+three are filled in, all three must appear in your output. Skipping a property \
+is a failure, not a safe omission.
 
 Use these field names only:
   property_label, rents_received, total_expenses, mortgage_interest,
@@ -88,7 +118,12 @@ is not present in the spans you were given. If a field has no span, leave it \
 null.
 
 Money fields are whole dollars as integers: strip commas and any currency \
-symbol, and do not round. "28,509" becomes 28509."""
+symbol, and do not round. "28,509" becomes 28509.
+
+Dates are ISO, YYYY-MM-DD. A form that writes only a month and year, such as \
+"04/2021", becomes "2021-04-01". Reformatting a date you were given is \
+transcription, not inference; supplying a date you were NOT given is not \
+allowed."""
 
 
 @dataclass
@@ -168,6 +203,7 @@ class Extractor:
     # ------------------------------------------------------------------
     def pass_a_evidence(self, doc: Document) -> tuple[list[Evidence], dict]:
         """Find and quote. Citations give us the page for free."""
+        blocks, page_of = _blocks_and_pages(doc)
         request = {
             "model": self.evidence_model,
             "max_tokens": 8000,
@@ -185,12 +221,7 @@ class Extractor:
                         # One content block per page, so a citation's block
                         # index IS the page number. That is where the page in
                         # the provenance chain comes from.
-                        "source": {
-                            "type": "content",
-                            "content": [
-                                {"type": "text", "text": page} for page in doc.pages
-                            ],
-                        },
+                        "source": {"type": "content", "content": blocks},
                         "title": doc.id,
                         "citations": {"enabled": True},
                     },
@@ -201,50 +232,97 @@ class Extractor:
             }],
         }
         payload = self._call(request, "evidence", doc.id)
-        return self._parse_evidence(payload, doc), payload
+        return self._parse_evidence(payload, doc, page_of), payload
 
     @staticmethod
-    def _parse_evidence(payload: dict, doc: Document) -> list[Evidence]:
+    def _parse_evidence(
+        payload: dict, doc: Document, page_of: list[int]
+    ) -> list[Evidence]:
         """Turn cited text blocks into Evidence.
 
-        The model writes one line per figure; the API attaches citations to the
-        text blocks those lines sit in. We take the field name and the value
-        from the line, and the page from the citation - so the page is the
-        API's answer, not the model's claim about itself.
+        The API splits the response **at citation boundaries**, which is the
+        thing that makes a naive parser return nothing. A single logical line
+        of output arrives as two blocks:
+
+            block n   : 'A :: rents_received :: '      (no citation)
+            block n+1 : '82,100'                       (carries the citation)
+
+        So neither block parses on its own - the first has no value, the second
+        has no field name. The parser therefore works over the *joined* text
+        with a character-to-block map, matches the whole
+        ``label :: field :: value`` pattern across the seam, and then looks up
+        which block contributed the value to get its citation.
+
+        That citation is the whole point: its ``cited_text`` is the exact form
+        line the figure was read from, and its ``start_block_index`` resolves
+        through ``page_of`` to a page. Neither is the model's claim about
+        itself - both come from the API.
         """
-        out: list[Evidence] = []
-        for block in payload.get("content", []):
-            if block.get("type") != "text":
-                continue
-            text = block.get("text", "")
-            citations = block.get("citations") or []
-            page = 1
-            cited = ""
-            for c in citations:
+        text_blocks = [b for b in payload.get("content", []) if b.get("type") == "text"]
+
+        joined: list[str] = []
+        owner: list[int] = []          # character index -> index into text_blocks
+        for i, block in enumerate(text_blocks):
+            chunk = block.get("text", "")
+            joined.append(chunk)
+            owner.extend([i] * len(chunk))
+        stream = "".join(joined)
+
+        def citation_for(char_index: int) -> tuple[int, str]:
+            """Page and quote for the block covering this character."""
+            if char_index >= len(owner):
+                return 1, ""
+            block = text_blocks[owner[char_index]]
+            best_page, best_quote = 1, ""
+            for c in block.get("citations") or []:
+                quote = c.get("cited_text", "") or ""
                 if c.get("type") == "content_block_location":
-                    page = int(c.get("start_block_index", 0)) + 1
-                elif c.get("type") == "char_location":
+                    idx = int(c.get("start_block_index", 0))
+                    page = page_of[idx] if idx < len(page_of) else 1
+                else:
                     page = 1
-                cited = c.get("cited_text", cited)
-            for line in text.splitlines():
-                if line.count("::") != 2:
-                    continue
-                label, name, value = (p.strip() for p in line.split("::"))
-                name = name.strip().lower().replace(" ", "_")
-                if not value:
-                    continue
-                # Confidence: an explicit form line number in the cited span is
-                # the strongest evidence available. This is a heuristic prior
-                # that the calibration curve then measures - see evals/run.py.
-                confidence = 0.97 if re.search(r"\b\d{1,2}\s", cited or "") else 0.88
-                if doc.note:
-                    confidence -= 0.06  # scanned document
-                out.append(Evidence(
-                    field=name, quote=(cited or line).strip()[:300],
-                    page=page, confidence=max(0.05, min(0.99, confidence)),
-                ))
-                out[-1].__dict__["_label"] = label
-                out[-1].__dict__["_value"] = value
+                # Prefer a quote that looks like a form line over a header.
+                if not best_quote or (
+                    re.search(r"\d", quote) and len(quote) < len(best_quote)
+                ):
+                    best_quote, best_page = quote, page
+            return best_page, best_quote
+
+        out: list[Evidence] = []
+        pattern = re.compile(
+            r"([A-Za-z0-9 ,.'\-]{1,60}?)\s*::\s*([a-z_ ]{3,40}?)\s*::\s*([^\n]{1,80})"
+        )
+        for match in pattern.finditer(stream):
+            label = match.group(1).strip().lstrip("*# ").strip()
+            name = match.group(2).strip().lower().replace(" ", "_")
+            value = match.group(3).strip()
+            if not value or not name:
+                continue
+            page, cited = citation_for(match.start(3))
+
+            # Confidence prior: a cited span that begins with an explicit form
+            # line number is the strongest evidence available; a span with any
+            # digits is next; an uncited value is weakest. This is only a
+            # prior - the calibration curve in evals/run.py is what says
+            # whether it means anything.
+            if re.match(r"\s*\d{1,2}[a-c]?\s+\S", cited or ""):
+                confidence = 0.97
+            elif cited and re.search(r"\d", cited):
+                confidence = 0.93
+            elif cited:
+                confidence = 0.85
+            else:
+                confidence = 0.70
+            if doc.note:
+                confidence -= 0.06  # scanned document
+
+            evidence = Evidence(
+                field=name, quote=(cited or value).strip()[:300],
+                page=page, confidence=max(0.05, min(0.99, confidence)),
+            )
+            evidence.__dict__["_label"] = label
+            evidence.__dict__["_value"] = value
+            out.append(evidence)
         return out
 
     # ------------------------------------------------------------------

@@ -1,0 +1,32 @@
+{
+ "id": "msg_011CfNLm7quQZ8SdxThJGZeX",
+ "container": null,
+ "content": [
+  {
+   "citations": null,
+   "text": "{\"properties\": [{\"property_label\": \"1842 Casitas Ave, Pasadena, CA 91103\", \"tax_year\": 2021, \"rents_received\": 79200, \"total_expenses\": 58897, \"mortgage_interest\": 18615, \"depreciation\": 16938, \"insurance\": 4900, \"property_taxes\": 7900, \"date_placed_in_service\": null, \"cost_or_basis\": null, \"recovery_period_years\": null}, {\"property_label\": \"4412 Ramsey Ave, Austin, TX 78756\", \"tax_year\": 2021, \"rents_received\": 30600, \"total_expenses\": 164962, \"mortgage_interest\": 11180, \"depreciation\": 135734, \"insurance\": 2600, \"property_taxes\": 9700, \"date_placed_in_service\": null, \"cost_or_basis\": null, \"recovery_period_years\": null}, {\"property_label\": \"1247 Ocean Blvd, Long Beach, CA 90802\", \"tax_year\": 2021, \"rents_received\": 114000, \"total_expenses\": 81629, \"mortgage_interest\": 9100, \"depreciation\": 28509, \"insurance\": 11200, \"property_taxes\": 13900, \"date_placed_in_service\": null, \"cost_or_basis\": null, \"recovery_period_years\": null}]}",
+   "type": "text"
+  }
+ ],
+ "model": "claude-haiku-4-5-20251001",
+ "role": "assistant",
+ "stop_details": null,
+ "stop_reason": "end_turn",
+ "stop_sequence": null,
+ "type": "message",
+ "usage": {
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 0,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "cache_creation_input_tokens": 0,
+  "cache_read_input_tokens": 0,
+  "inference_geo": "not_available",
+  "input_tokens": 1914,
+  "output_tokens": 346,
+  "output_tokens_details": null,
+  "server_tool_use": null,
+  "service_tier": "standard"
+ },
+ "diagnostics": null
+}

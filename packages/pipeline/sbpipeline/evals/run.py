@@ -78,13 +78,36 @@ def _norm_label(s: str) -> str:
     return re.sub(r"\s+", " ", s).strip()
 
 
+def _month_year(raw: Any) -> tuple[int, int] | None:
+    """Parse the month and year out of whatever a date arrived as.
+
+    Forms write "04/2021"; the schema asks for ISO. Scoring these as different
+    values would be testing the string format rather than whether the pipeline
+    read the right month - and the month is all that matters, because the
+    mid-month convention only needs the month.
+    """
+    text = str(raw).strip()
+    for pattern, order in (
+        (r"^(\d{4})-(\d{1,2})", "ym"),
+        (r"^(\d{1,2})/(\d{4})$", "my"),
+        (r"^(\d{1,2})/\d{1,2}/(\d{4})$", "my"),
+        (r"^(\d{1,2})-(\d{4})$", "my"),
+    ):
+        m = re.match(pattern, text)
+        if m:
+            a, b = int(m.group(1)), int(m.group(2))
+            return (a, b) if order == "ym" else (b, a)
+    return None
+
+
 def _match(expected: Any, got: Any, kind: str) -> bool:
     if got is None or expected is None:
         return False
     if kind == "text":
         return _norm_label(str(expected)) == _norm_label(str(got))
     if kind == "date":
-        return str(expected)[:7] == str(got)[:7]
+        e, g = _month_year(expected), _month_year(got)
+        return e is not None and e == g
     if kind == "number":
         return abs(float(expected) - float(got)) < 0.01
     # money: exact to the dollar. No tolerance - the engine is exact, and a
