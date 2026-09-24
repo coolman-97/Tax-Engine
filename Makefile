@@ -1,7 +1,7 @@
 PY := .venv/bin/python
 ENGINE := packages/engine
 
-.PHONY: help venv demo test verify validate web bundle bench clean
+.PHONY: help venv demo test verify validate web bundle bench eval eval-live clean
 
 help:
 	@echo "make demo      - the walkthrough, in the terminal"
@@ -9,6 +9,8 @@ help:
 	@echo "make validate  - regenerate docs/VALIDATION.md from the engine"
 	@echo "make verify    - test + validate + determinism (what CI runs)"
 	@echo "make web       - re-export the scenario bundle and rebuild the viewer"
+	@echo "make eval      - extraction eval, offline from cassettes"
+	@echo "make eval-live - re-run the eval against the API and re-record"
 	@echo "make bench     - simulation throughput"
 
 venv:
@@ -32,6 +34,16 @@ bundle:
 web: bundle
 	@$(PY) scripts/build_web.py
 	@echo "open packages/web/index.html"
+
+eval:
+	@PYTHONPATH=packages/pipeline:packages/engine \
+	  $(PY) packages/pipeline/sbpipeline/evals/run.py
+
+eval-live:
+	@PYTHONPATH=packages/pipeline:packages/engine \
+	  $(PY) packages/pipeline/sbpipeline/evals/run.py --live --record
+	@PYTHONPATH=packages/pipeline:packages/engine \
+	  $(PY) scripts/report_evals.py
 
 verify: test validate
 	@echo ""

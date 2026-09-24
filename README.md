@@ -157,6 +157,44 @@ with a named test — including the four the brief called out: interest-only
 conversions, ARM cap structures, HELOCs, and a property carrying four paid-off
 liens.
 
+### The document pipeline, and measuring whether it works
+
+`packages/pipeline/` turns tax returns into attested facts. Two passes, and the
+split was forced by a real API constraint that turned out to point at the better
+design: Anthropic's citations feature returns a 400 alongside
+`output_config.format`, so you cannot get grounded page-anchored quotes and a
+schema-validated object from one call.
+
+**Pass A** takes the document with `citations: {enabled: true}` — one content
+block per page, so a citation's block index *is* the page number — and does
+nothing but find and quote. **Pass B** runs `messages.parse()` over only those
+quotes and never sees the document. It cannot invent a value because it has
+nothing to invent from. Grounding stops being something the prompt asks for and
+becomes a property of the pipeline's shape.
+
+The corpus is generated, which is what makes the eval honest: ground-truth
+labels are exact by construction, and **the mess can be deliberate** — a missing
+2023 return, the same property named three ways across years, a depreciation
+figure that disagrees between 2022 and 2024 because the preparer changed the
+land allocation and wrote that down nowhere, and one document with OCR-style
+scanner confusions.
+
+That last one is the demo's blocked recommendation, arriving through the
+pipeline rather than hand-authored.
+
+Reconciliation resolves the three aliases to one property, reports 2023 as
+missing, and surfaces the disagreement as a `Conflict`. **There is no averaging
+code path**, and a test asserts there isn't one — two filed returns implying 30%
+and 20% land do not average to 25%.
+
+[docs/EVALS.md](docs/EVALS.md) reports per-field precision and recall (weighted,
+because `date_placed_in_service` breaks the whole schedule and `insurance` moves
+cash flow slightly), a confidence calibration table with expected calibration
+error, cost and latency, and an operating point **chosen** from the
+precision/review-burden curve rather than picked.
+
+`make eval` runs it offline from committed cassettes — no key, no network.
+
 ### The visualization
 
 Five views over the engine's exported ledger: the portfolio, **the gate** (the
@@ -204,9 +242,8 @@ Stated plainly, because a README that only lists wins is marketing.
 - C corporations are not modelled (§291(a)(1) changes recapture entirely).
 - §199A is in the rule data but not applied.
 - State coverage is California and Texas.
-- The document-extraction pipeline is specified in
-  [docs/ROADMAP.md](docs/ROADMAP.md) but not built here; the demo's provenance
-  comes from hand-authored `Extracted` facts carrying real page and citation
-  data, so the gate and the derivation tree are genuine while the reader is not.
+- The extraction eval numbers in [docs/EVALS.md](docs/EVALS.md) come from
+  recorded cassettes. Run `make eval-live` with an `ANTHROPIC_API_KEY` to
+  re-record them against the API.
 
 The full list is at the end of [docs/EDGE_CASES.md](docs/EDGE_CASES.md).
