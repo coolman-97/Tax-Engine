@@ -226,10 +226,16 @@ packages/engine/standbehind/
   simulate.py         event-sourced ledger, hashable and replayable
   rules/              versioned tax data with citations
   fixtures.py         the demo household
-tests/                86 tests, property-based where invariants exist
+tests/                105 tests, property-based where invariants exist
 docs/                 EDGE_CASES · VALIDATION · ROADMAP · ADRs
+packages/pipeline/sbpipeline/
+  corpus/             generated tax documents, ground truth for free
+  extract.py          two-pass: cite-and-quote, then structure the quotes
+  reconcile.py        entity resolution + conflicts, never averaging
+  cassettes/          recorded API responses; the eval runs with no key
+  evals/run.py        per-field P/R, calibration, operating points
 packages/web/         the single-file viewer + its build step
-scripts/              demo · validate · export_bundle · build_web
+scripts/              demo · validate · export_bundle · build_web · report_evals
 ```
 
 ## Where it stops
