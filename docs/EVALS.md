@@ -10,7 +10,14 @@ no key and no network.
   evidence spans**, 73 scored field judgements
 - 16,287 input / 6,152 output tokens ·
   **$0.1411** total, $0.0282 per document
-- Median latency 1 ms per document (both passes)
+
+Token counts and cost come from the recorded responses, so they are the real
+figures from the live run. Wall-clock latency is deliberately **not** reported
+here: replaying a cassette measures reading a JSON file, not the API, so a
+number in this document would be both meaningless and different on every
+machine — which is exactly what made this report non-deterministic and the CI
+gate flaky the first time round. `make eval-live` prints per-document latency
+from an actual API run.
 
 ---
 

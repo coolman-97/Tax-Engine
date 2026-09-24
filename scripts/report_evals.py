@@ -52,8 +52,6 @@ def main() -> int:
     ]
 
     per_doc_cost = r["cost_usd"] / max(1, r["documents"])
-    latencies = r["latency_ms_per_doc"]
-    median = sorted(latencies)[len(latencies) // 2] if latencies else 0
 
     doc = f"""# Extraction evals
 
@@ -67,7 +65,14 @@ no key and no network.
   evidence spans**, {r['judgements']} scored field judgements
 - {r['input_tokens']:,} input / {r['output_tokens']:,} output tokens ·
   **${r['cost_usd']:.4f}** total, ${per_doc_cost:.4f} per document
-- Median latency {median:,} ms per document (both passes)
+
+Token counts and cost come from the recorded responses, so they are the real
+figures from the live run. Wall-clock latency is deliberately **not** reported
+here: replaying a cassette measures reading a JSON file, not the API, so a
+number in this document would be both meaningless and different on every
+machine — which is exactly what made this report non-deterministic and the CI
+gate flaky the first time round. `make eval-live` prints per-document latency
+from an actual API run.
 
 ---
 
