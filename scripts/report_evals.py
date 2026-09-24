@@ -14,9 +14,9 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "packages" / "pipeline"))
 sys.path.insert(0, str(ROOT / "packages" / "engine"))
 
-from sbpipeline.corpus import build_corpus  # noqa: E402
-from sbpipeline.evals.run import TARGET_PRECISION, run  # noqa: E402
-from sbpipeline.extract import EVIDENCE_MODEL, STRUCTURE_MODEL  # noqa: E402
+from taxpipeline.corpus import build_corpus  # noqa: E402
+from taxpipeline.evals.run import TARGET_PRECISION, run  # noqa: E402
+from taxpipeline.extract import EVIDENCE_MODEL, STRUCTURE_MODEL  # noqa: E402
 
 OUT = ROOT / "docs" / "EVALS.md"
 

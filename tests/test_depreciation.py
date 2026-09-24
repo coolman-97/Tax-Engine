@@ -4,7 +4,7 @@ from decimal import Decimal
 
 from hypothesis import given, settings
 from hypothesis import strategies as st
-from standbehind.depreciation import (
+from taxengine.depreciation import (
     FIFTEEN_YEAR,
     FIVE_YEAR,
     NONRESIDENTIAL_REAL,
@@ -12,7 +12,7 @@ from standbehind.depreciation import (
     SEVEN_YEAR,
     build_schedule,
 )
-from standbehind.money import Money, rate
+from taxengine.money import Money, rate
 
 basis = st.integers(min_value=1, max_value=50_000_000_00)
 months = st.integers(min_value=1, max_value=12)

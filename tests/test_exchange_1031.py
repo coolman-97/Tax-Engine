@@ -5,16 +5,16 @@ from datetime import date
 
 from hypothesis import given, settings
 from hypothesis import strategies as st
-from standbehind.dispositions import (
+from taxengine.dispositions import (
     ExchangeTerms,
     SaleTerms,
     compute_exchange,
     compute_sale,
 )
-from standbehind.loans import Lien, LienStack, fixed_rate_mortgage
-from standbehind.money import Money, rate
-from standbehind.property import Property, PropertyKind
-from standbehind.rules import load
+from taxengine.loans import Lien, LienStack, fixed_rate_mortgage
+from taxengine.money import Money, rate
+from taxengine.property import Property, PropertyKind
+from taxengine.rules import load
 
 RULES = load(2026)
 

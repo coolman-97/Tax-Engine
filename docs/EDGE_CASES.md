@@ -1,10 +1,7 @@
 # Edge cases
 
-> *"The people who do well here bring us a problem while they're still inside it,
-> instead of only showing finished work. They find the edge cases themselves."*
-
-This is that register. It is split into two parts, and the first part is the one
-worth reading.
+A register of what breaks, kept because a list of what works is not evidence of
+much. It is in two parts, and the first part is the one worth reading.
 
 ---
 
@@ -135,7 +132,7 @@ denominator.
 ## Part 2 — hunted, handled, and under test
 
 Cases the engine was built to handle, each with a test. The four in **bold** are
-the ones the job posting named.
+the instruments that most reliably break a naive implementation.
 
 ### Debt instruments
 

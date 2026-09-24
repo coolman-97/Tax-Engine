@@ -1,6 +1,6 @@
 """Loans, including the ones that break naive amortisation schedules.
 
-The job posting names four things it expects to break an engine: interest-only
+Four instruments reliably break a naive amortisation schedule: interest-only
 loans, ARMs, HELOCs, and a property carrying four paid-off liens. All four are
 here, plus balloons, negative amortisation, prepayment penalties and PMI.
 
@@ -491,8 +491,10 @@ class LienStack:
     def lendable_equity(
         self, value: Money, when: date, max_ltv: Rate = Decimal("0.70")
     ) -> Money:
-        """Value at ``max_ltv`` less all existing debt - the figure Leveridge's
-        own guide calls the useful one, rather than raw equity."""
+        """Value at ``max_ltv`` less all existing debt.
+
+        The figure a lender would actually advance against, which is the one
+        worth planning on - raw equity overstates what a client can reach."""
         return (value.apply_rate(max_ltv) - self.total_debt(when)).clamp_at_zero()
 
 

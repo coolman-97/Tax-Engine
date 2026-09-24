@@ -3,9 +3,10 @@
 This repo is an engine and a viewer. The parts that would make it a product are
 below, in the order I'd actually do them, with what I'd measure for each.
 
-It is written against the roadmap Leveridge described as open: the document
-pipeline, a conversational layer over a client's whole portfolio, and monitoring
-that tells an advisor something changed before the client calls them.
+Three things separate an engine from something an advisory firm could actually
+run on: a document pipeline that is trustworthy rather than merely fast, a
+conversational layer over a client's whole portfolio, and monitoring that
+surfaces a change before the client notices it.
 
 ---
 

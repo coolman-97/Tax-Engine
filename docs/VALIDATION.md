@@ -109,5 +109,5 @@ Asserted by Hypothesis across generated inputs rather than chosen examples
 - Rev. Proc. 87-56 asset class 00.3 (land improvements).
 - California FTB Form 3840 and the 2025 rate schedules.
 
-Each rule file under `packages/engine/standbehind/rules/` carries its own
+Each rule file under `packages/engine/taxengine/rules/` carries its own
 `source` and per-field `verified` mapping.

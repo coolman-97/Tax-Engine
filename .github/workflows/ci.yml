@@ -21,7 +21,7 @@ jobs:
           pip install pydantic numpy pyyaml pytest hypothesis ruff anthropic
 
       - name: Lint
-        run: ruff check packages/engine/standbehind scripts tests
+        run: ruff check packages/engine/taxengine scripts tests
 
       - name: Tests (unit + property-based)
         run: PYTHONPATH=packages/engine python -m pytest tests/ -q
@@ -39,8 +39,8 @@ jobs:
       - name: Ledger determinism
         run: |
           PYTHONPATH=packages/engine python - <<'PY'
-          from standbehind.fixtures import MARKET, build_household, build_strategies
-          from standbehind.simulate import simulate
+          from taxengine.fixtures import MARKET, build_household, build_strategies
+          from taxengine.simulate import simulate
           p, s = build_household(), build_strategies()[0]
           hashes = {simulate(p, s, MARKET, start_year=2026, horizon=30).ledger_hash
                     for _ in range(3)}
@@ -55,7 +55,7 @@ jobs:
       - name: Extraction eval replays offline
         run: |
           PYTHONPATH=packages/pipeline:packages/engine \
-            python packages/pipeline/sbpipeline/evals/run.py
+            python packages/pipeline/taxpipeline/evals/run.py
           PYTHONPATH=packages/pipeline:packages/engine \
             python scripts/report_evals.py
           git diff --exit-code -- docs/EVALS.md

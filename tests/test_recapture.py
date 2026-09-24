@@ -14,7 +14,7 @@ once bonus depreciation is claimed it is most of the basis.
 """
 from datetime import date
 
-from standbehind.depreciation import (
+from taxengine.depreciation import (
     FIFTEEN_YEAR,
     FIVE_YEAR,
     NONRESIDENTIAL_REAL,
@@ -23,10 +23,10 @@ from standbehind.depreciation import (
     Recapture,
     build_schedule,
 )
-from standbehind.dispositions import SaleTerms, compute_sale
-from standbehind.fixtures import build_household
-from standbehind.money import Money, rate
-from standbehind.rules import load
+from taxengine.dispositions import SaleTerms, compute_sale
+from taxengine.fixtures import build_household
+from taxengine.money import Money, rate
+from taxengine.rules import load
 
 RULES = load(2026)
 M = Money.from_dollars

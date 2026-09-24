@@ -15,20 +15,20 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "packages" / "engine"))
 
-from standbehind.dispositions.sale import SaleTerms
-from standbehind.fixtures import (
+from taxengine.dispositions.sale import SaleTerms
+from taxengine.fixtures import (
     MARKET,
     build_household,
     build_strategies,
     facts_for_demo,
 )
-from standbehind.household import HouseholdYear
-from standbehind.money import Money
-from standbehind.provenance import Fact, explain
-from standbehind.recommend import assess_exit
-from standbehind.rules import load
-from standbehind.rules.schema import FilingStatus as FS
-from standbehind.simulate import simulate
+from taxengine.household import HouseholdYear
+from taxengine.money import Money
+from taxengine.provenance import Fact, explain
+from taxengine.recommend import assess_exit
+from taxengine.rules import load
+from taxengine.rules.schema import FilingStatus as FS
+from taxengine.simulate import simulate
 
 M = Money.from_dollars
 W = 84

@@ -15,16 +15,16 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "packages" / "engine"))
 
-from standbehind.depreciation import (
+from taxengine.depreciation import (
     FIFTEEN_YEAR,
     FIVE_YEAR,
     RESIDENTIAL_RENTAL,
     SEVEN_YEAR,
     build_schedule,
 )
-from standbehind.money import Money
-from standbehind.rules import load
-from standbehind.rules.schema import FilingStatus as FS
+from taxengine.money import Money
+from taxengine.rules import load
+from taxengine.rules.schema import FilingStatus as FS
 
 BASIS = Money.from_dollars("1000000")
 OUT = ROOT / "docs" / "VALIDATION.md"
@@ -87,8 +87,8 @@ def main() -> int:
     failures += 0 if bracket_ok else 1
 
     # ---- Determinism ----
-    from standbehind.fixtures import MARKET, build_household, build_strategies
-    from standbehind.simulate import simulate
+    from taxengine.fixtures import MARKET, build_household, build_strategies
+    from taxengine.simulate import simulate
     portfolio, strategies = build_household(), build_strategies()
     runs = [simulate(portfolio, strategies[0], MARKET, start_year=2026, horizon=30)
             for _ in range(3)]
@@ -194,7 +194,7 @@ Asserted by Hypothesis across generated inputs rather than chosen examples
 - Rev. Proc. 87-56 asset class 00.3 (land improvements).
 - California FTB Form 3840 and the 2025 rate schedules.
 
-Each rule file under `packages/engine/standbehind/rules/` carries its own
+Each rule file under `packages/engine/taxengine/rules/` carries its own
 `source` and per-field `verified` mapping.
 """
     OUT.write_text(doc)

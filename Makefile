@@ -37,11 +37,11 @@ web: bundle
 
 eval:
 	@PYTHONPATH=packages/pipeline:packages/engine \
-	  $(PY) packages/pipeline/sbpipeline/evals/run.py
+	  $(PY) packages/pipeline/taxpipeline/evals/run.py
 
 eval-live:
 	@PYTHONPATH=packages/pipeline:packages/engine \
-	  $(PY) packages/pipeline/sbpipeline/evals/run.py --live --record
+	  $(PY) packages/pipeline/taxpipeline/evals/run.py --live --record
 	@PYTHONPATH=packages/pipeline:packages/engine \
 	  $(PY) scripts/report_evals.py
 

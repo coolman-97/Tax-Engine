@@ -3,11 +3,11 @@
 These run offline. The extraction eval itself needs either recorded cassettes
 or a live key; see tests/test_extraction_eval.py.
 """
-from sbpipeline.cassettes import Cassette
-from sbpipeline.corpus import GOLDEN, build_corpus
-from sbpipeline.corpus.generate import LONG_BEACH_ALIASES
-from sbpipeline.reconcile import normalize_address, reconcile
-from sbpipeline.schemas import FIELD_SPECS, PropertyFacts
+from taxpipeline.cassettes import Cassette
+from taxpipeline.corpus import GOLDEN, build_corpus
+from taxpipeline.corpus.generate import LONG_BEACH_ALIASES
+from taxpipeline.reconcile import normalize_address, reconcile
+from taxpipeline.schemas import FIELD_SPECS, PropertyFacts
 
 
 # --------------------------------------------------------------------------
@@ -135,7 +135,7 @@ def test_reconciliation_never_averages():
 
     import inspect
 
-    import sbpipeline.reconcile as module
+    import taxpipeline.reconcile as module
     source = inspect.getsource(module)
     for smell in ("mean(", "statistics.", "/ len(", "sum(values)"):
         assert smell not in source, f"an averaging path appeared: {smell}"
@@ -196,7 +196,7 @@ def test_the_eval_replays_entirely_from_cassettes():
     being re-recorded - at which point docs/EVALS.md is reporting numbers for
     a pipeline that no longer exists.
     """
-    from sbpipeline.evals.run import run
+    from taxpipeline.evals.run import run
 
     report = run(live=False, record=False)
     assert not report["errors"], f"cassette misses: {report['errors'][:2]}"
@@ -210,7 +210,7 @@ def test_extraction_holds_its_measured_quality():
     Deliberately a floor rather than an equality: the point is to catch a
     regression, not to pin the pipeline to one run.
     """
-    from sbpipeline.evals.run import run
+    from taxpipeline.evals.run import run
 
     report = run(live=False, record=False)
     assert report["weighted_recall"] >= 0.95, report["weighted_recall"]
@@ -223,8 +223,8 @@ def test_the_degraded_scan_did_not_silently_lose_a_corrupted_figure():
     """On the 2021 scan, $18,615 of mortgage interest is corrupted to
     'l8,615'. The pipeline recovers it from the form's arithmetic. If that ever
     regresses to a confident wrong number, this fails."""
-    from sbpipeline.evals.run import judge
-    from sbpipeline.extract import Extractor
+    from taxpipeline.evals.run import judge
+    from taxpipeline.extract import Extractor
 
     scan = next(d for d in build_corpus()
                 if d.tax_year == 2021 and d.kind == "schedule_e")

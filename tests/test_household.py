@@ -4,16 +4,16 @@ from decimal import Decimal
 
 from hypothesis import given, settings
 from hypothesis import strategies as st
-from standbehind.character import GainCharacter
-from standbehind.household import (
+from taxengine.character import GainCharacter
+from taxengine.household import (
     HouseholdYear,
     PassiveActivityLedger,
     RentalYear,
     compute_tax_year,
 )
-from standbehind.money import Money
-from standbehind.rules import load
-from standbehind.rules.schema import FilingStatus as FS
+from taxengine.money import Money
+from taxengine.rules import load
+from taxengine.rules.schema import FilingStatus as FS
 
 RULES = load(2026)
 MFJ = FS.MARRIED_FILING_JOINTLY

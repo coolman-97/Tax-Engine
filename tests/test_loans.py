@@ -1,11 +1,11 @@
-"""Loans, including the four instruments the job posting named as breakers."""
+"""Loans, including the four instruments that most reliably break a schedule."""
 from datetime import date
 from decimal import Decimal
 
 import pytest
 from hypothesis import given, settings
 from hypothesis import strategies as st
-from standbehind.loans import (
+from taxengine.loans import (
     PMI,
     FixedRate,
     Lien,
@@ -18,7 +18,7 @@ from standbehind.loans import (
     heloc,
     interest_only_then_amortizing,
 )
-from standbehind.money import Money, rate
+from taxengine.money import Money, rate
 
 principal = st.integers(min_value=10_000_00, max_value=5_000_000_00)
 annual = st.sampled_from(["0.02", "0.0325", "0.045", "0.065", "0.07875", "0.095", "0.12"])
@@ -168,7 +168,7 @@ def test_prepayment_penalty_applies_only_inside_the_window():
 
 
 # --------------------------------------------------------------------------
-# "A property carrying four paid-off liens" - named in the job posting.
+# A property carrying four paid-off liens.
 # --------------------------------------------------------------------------
 def _four_paid_off():
     first = fixed_rate_mortgage("1st", Money.from_dollars("310000"), date(2018, 5, 1), rate("0.0475"))

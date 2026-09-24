@@ -39,10 +39,10 @@ ROOT = Path(__file__).resolve().parents[4]
 sys.path.insert(0, str(ROOT / "packages" / "pipeline"))
 sys.path.insert(0, str(ROOT / "packages" / "engine"))
 
-from sbpipeline.cassettes import Cassette  # noqa: E402
-from sbpipeline.corpus import GOLDEN, build_corpus  # noqa: E402
-from sbpipeline.extract import Extractor  # noqa: E402
-from sbpipeline.schemas import FIELD_SPECS  # noqa: E402
+from taxpipeline.cassettes import Cassette  # noqa: E402
+from taxpipeline.corpus import GOLDEN, build_corpus  # noqa: E402
+from taxpipeline.extract import Extractor  # noqa: E402
+from taxpipeline.schemas import FIELD_SPECS  # noqa: E402
 
 WEIGHTS = {"critical": 4.0, "high": 2.0, "medium": 1.0, "low": 0.5}
 TARGET_PRECISION = 0.99

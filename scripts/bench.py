@@ -7,8 +7,8 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "packages" / "engine"))
-from standbehind.fixtures import MARKET, build_household, build_strategies
-from standbehind.simulate import simulate
+from taxengine.fixtures import MARKET, build_household, build_strategies
+from taxengine.simulate import simulate
 
 portfolio, strategies = build_household(), build_strategies()
 for horizon in (10, 30):

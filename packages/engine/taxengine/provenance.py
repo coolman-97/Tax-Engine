@@ -57,7 +57,7 @@ T = TypeVar("T")
 #: Confidence at or above which an extracted value is treated as
 #: policy-acceptable without a human touching it. This is not a guess - it is
 #: the operating point chosen from the calibration curve in
-#: ``packages/pipeline/sbpipeline/evals``, picked to hold field-level precision
+#: ``packages/pipeline/taxpipeline/evals``, picked to hold field-level precision
 #: at or above 0.99 on the golden set. Change it there, not here.
 AUTO_ACCEPT_CONFIDENCE = Decimal("0.90")
 

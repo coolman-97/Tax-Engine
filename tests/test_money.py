@@ -4,7 +4,7 @@ from decimal import Decimal
 import pytest
 from hypothesis import assume, given
 from hypothesis import strategies as st
-from standbehind.money import Money, rate
+from taxengine.money import Money, rate
 
 cents = st.integers(min_value=-10**12, max_value=10**12)
 positive_cents = st.integers(min_value=1, max_value=10**12)

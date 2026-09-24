@@ -1,9 +1,8 @@
 """The demo household.
 
 Four properties, chosen so that between them they exercise every instrument
-the job posting named as a thing that breaks engines - interest-only loans,
-ARMs, HELOCs, and a property carrying four paid-off liens - plus several it
-did not name: a stepped-up basis from an inheritance, a cost segregation study
+reliably breaks an engine - interest-only loans, ARMs, HELOCs, and a property
+carrying four paid-off liens - plus several less obvious ones: a stepped-up basis from an inheritance, a cost segregation study
 with bonus depreciation, a former principal residence with a section 121 clock
 running out, and a California property whose exchange would trigger the FTB
 3840 clawback.
